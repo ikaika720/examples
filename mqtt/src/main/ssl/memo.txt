@@ -11,7 +11,7 @@ openssl req -new -x509 -days 3650 -extensions v3_ca -keyout ca.key -out ca.crt
 # generate a key pair
 openssl genrsa -out server.key 2048
 
-# generate a servre certificate request
+# generate a server certificate signing request
 openssl req -out server.csr -key server.key -new
 
 # sign the CSR
@@ -19,3 +19,19 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out s
 
 # import the server certificate to a trust store
 keytool -import -alias server -keystore client.ts -file server.crt
+
+# client
+# generate a key pair
+openssl genrsa -out client.key 2048
+
+# generate a client certificate signing request
+openssl req -out client.csr -key client.key -new
+
+# sign the CSR
+openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -days 365
+
+# export the client certificate and the key as pkcs12 format
+openssl pkcs12 -export -in client.crt -inkey client.key -out client.p12
+
+# convert the certificate and the key to JKS format
+keytool -importkeystore -srckeystore client.p12 -srcstoretype pkcs12 -srcalias 1 -destkeystore client.jks -deststoretype jks -destalias client

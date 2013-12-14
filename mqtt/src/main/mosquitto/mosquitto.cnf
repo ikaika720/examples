@@ -1,6 +1,15 @@
 port 1883
+
 listener 8883
 cafile ../ssl/ca.crt
 certfile ../ssl/server.crt
 keyfile ../ssl/server.key
 tls_version tlsv1.2
+
+listener 8884
+cafile ../ssl/ca.crt
+certfile ../ssl/server.crt
+keyfile ../ssl/server.key
+tls_version tlsv1.2
+require_certificate true
+use_identity_as_username true
