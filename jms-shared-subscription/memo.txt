@@ -1,0 +1,9 @@
+set M2_REPO=%USERPROFILE%\.m2\repository
+
+set CLASSPATH=target\classes
+set CLASSPATH=%CLASSPATH%;%M2_REPO%\org\glassfish\mq\imq\5.0\imq-5.0.jar
+set CLASSPATH=%CLASSPATH%;%M2_REPO%\javax\jms\javax.jms-api\2.0\javax.jms-api-2.0.jar
+set CLASSPATH=%CLASSPATH%;%M2_REPO%\org\glassfish\mq\imqxm\5.0\imqxm-5.0.jar
+set CLASSPATH=%CLASSPATH%;%M2_REPO%\org\glassfish\mq\jaxm-api\5.0\jaxm-api-5.0.jar
+
+java hoge.exp.jms.sharedsubscription.Subscriber
