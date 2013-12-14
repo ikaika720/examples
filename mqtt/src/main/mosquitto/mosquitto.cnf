@@ -1,4 +1,6 @@
 port 1883
+allow_anonymous true
+password_file pwfile
 
 listener 8883
 cafile ../ssl/ca.crt
