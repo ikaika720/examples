@@ -24,7 +24,9 @@ public static void main(String[] args) {
 		} finally {
 			if (client != null) {
 				try {
-					client.disconnect();
+					if (client.isConnected()) {
+						client.disconnect();
+					}
 					client.close();
 				} catch (MqttException e) {
 					e.printStackTrace();
