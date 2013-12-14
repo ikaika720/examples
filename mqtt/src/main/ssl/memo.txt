@@ -1,0 +1,21 @@
+# see http://mosquitto.org/man/mosquitto-tls-7.html
+# see http://activemq.apache.org/how-do-i-use-ssl.html
+
+# Passwords for existing files are "password"
+
+# ca
+# generate a ca key pair and its certificate
+openssl req -new -x509 -days 3650 -extensions v3_ca -keyout ca.key -out ca.crt
+
+# server
+# generate a key pair
+openssl genrsa -out server.key 2048
+
+# generate a servre certificate request
+openssl req -out server.csr -key server.key -new
+
+# sign the CSR
+openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 365
+
+# import the server certificate to a trust store
+keytool -import -alias server -keystore client.ts -file server.crt
