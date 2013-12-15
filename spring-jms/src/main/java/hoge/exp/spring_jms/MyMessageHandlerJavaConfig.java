@@ -38,6 +38,7 @@ public class MyMessageHandlerJavaConfig {
     SimpleMessageListenerContainer jmsTemplate(final ConnectionFactory cf,
     		final MessageListenerAdapter messageLisner) {
     	return new SimpleMessageListenerContainer() {
+    		// instance initialization block
     		{
     			setConnectionFactory(cf);
     			setMessageListener(messageLisner);
