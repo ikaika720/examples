@@ -35,7 +35,7 @@ public class MyMessageHandlerJavaConfig {
     }
 
     @Bean
-    SimpleMessageListenerContainer jmsTemplate(final ConnectionFactory cf,
+    SimpleMessageListenerContainer messageListenerContainer(final ConnectionFactory cf,
     		final MessageListenerAdapter messageLisner) {
     	return new SimpleMessageListenerContainer() {
     		// instance initialization block
