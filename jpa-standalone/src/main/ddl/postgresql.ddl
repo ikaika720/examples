@@ -11,3 +11,11 @@ CREATE TABLE member (
 );
 
 ALTER TABLE member OWNER TO user01;
+
+CREATE TABLE member_member (
+    member_id bigint,
+    friends_id bigint,
+    PRIMARY KEY(member_id, friends_id)
+);
+
+ALTER TABLE member_member OWNER TO user01;
