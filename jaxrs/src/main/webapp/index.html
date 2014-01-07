@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>JAX RS 2.0 examples</title>
+    </head>
+    <body>
+        <div>
+            <p>
+                <a href="webapi/hello">hello - simple GET and text/plain response</a>
+            </p>
+        </div>
+        <hr>
+        <div>
+            <p>
+                Temperature conversion
+            </p>
+            <input id="temp" type="text" name="temp">
+            <label for="celsius">°C</label>
+            <input id="celsius" type="radio" name="unit" value="c" checked="checked">
+            <label for="celsius">°F</label>
+            <input id="fahrenheit" type="radio" name="unit" value="f">
+            <label for="celsius">K</label>
+            <input id="kelvin" type="radio" name="unit" value="k">
+            <br>
+            <button onclick="convertTemperature()">convert</button>
+            <p>
+                <span id="temperatureResultCelsius">NaN</span> °C<br>
+                <span id="temperatureResultFahrenheit">NaN</span> °F<br>
+                <span id="temperatureResultKelvin">NaN</span> K
+            </p>
+        </div>
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script>
+            function convertTemperature() {
+                var unit = $("input:radio[name='unit']:checked").val();
+                var temp = $("#temp").val();
+                $.ajax({
+                    url: "webapi/temperature",
+                    dataType: "json",
+                    data: {unit: unit, temp: temp},
+                    success: function(data) {
+                        $("#temperatureResultCelsius").html(data["c"]);
+                        $("#temperatureResultFahrenheit").html(data["f"]);
+                        $("#temperatureResultKelvin").html(data["k"]);
+                    },
+                    error: function() {
+                        $("#temperatureResultCelsius").html("ERROR");
+                        $("#temperatureResultFahrenheit").html("ERROR");
+                        $("#temperatureResultKelvin").html("ERROR");
+                    }
+                })
+            }
+        </script>
+    </body>
+</html>
