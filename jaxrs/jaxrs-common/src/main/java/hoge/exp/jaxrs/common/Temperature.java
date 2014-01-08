@@ -1,4 +1,4 @@
-package hoge.exp.jaxrs;
+package hoge.exp.jaxrs.common;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

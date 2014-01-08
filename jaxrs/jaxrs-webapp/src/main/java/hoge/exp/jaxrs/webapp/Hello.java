@@ -1,4 +1,4 @@
-package hoge.exp.jaxrs;
+package hoge.exp.jaxrs.webapp;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

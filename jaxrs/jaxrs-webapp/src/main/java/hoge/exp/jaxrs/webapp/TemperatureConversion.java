@@ -1,4 +1,6 @@
-package hoge.exp.jaxrs;
+package hoge.exp.jaxrs.webapp;
+
+import hoge.exp.jaxrs.common.Temperature;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
