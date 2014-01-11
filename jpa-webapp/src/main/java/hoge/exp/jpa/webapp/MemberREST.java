@@ -1,4 +1,4 @@
-package hoge.exp.jap_webapp;
+package hoge.exp.jpa.webapp;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
