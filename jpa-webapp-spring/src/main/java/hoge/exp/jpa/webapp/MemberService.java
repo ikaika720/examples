@@ -1,6 +1,5 @@
 package hoge.exp.jpa.webapp;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 

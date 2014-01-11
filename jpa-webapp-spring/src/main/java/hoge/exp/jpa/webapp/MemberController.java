@@ -13,7 +13,7 @@ public class MemberController {
 
     @RequestMapping("/member/{id}")
     @ResponseBody
-    public String helloWorld(@PathVariable long id) {
+    public String getById(@PathVariable long id) {
         Member member = ms.getById(id);
         if (member == null) {
             throw new NotFoundException();
