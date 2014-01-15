@@ -4,6 +4,8 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>jdbc/MyDB</jta-data-source>
         <properties>
+            <property name="hibernate.dialect"
+                    value="org.hibernate.dialect.PostgreSQL9Dialect"/>
             <property name="hibernate.transaction.factory_class"
                     value="org.hibernate.transaction.JTATransactionFactory"/>
             <property name="hibernate.show_sql" value="true"/>
