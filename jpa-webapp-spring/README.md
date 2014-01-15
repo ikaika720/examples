@@ -13,7 +13,8 @@ The last number is the ID of a member. In this case the ID is 1. If there is no 
  2. Copy Log4J library (e.g. log4j-1.2.17.jar) to the library directory of the GlassFish (e.g. $GLASSFISH_DIR/glassfish/lib).
  3. Copy src/main/log4j/lo4j.xml to the configuration directory of the GlassFish domain (e.g. $GLASSFISH_DIR/glassfish/domains/domain1/config)
  4. Start or restart GlassFish.
- 5. Add a JDBC connection pool.
+ 5. Access the GlassFish administration console (http://localhost:4848/).
+ 6. Add a JDBC connection pool. Resources -> JDBC -> JDBC Connection Pools. Click on "New...".
   * Pool Name: MyDBPool
   * Resource Type: javax.sql.ConnectionPoolDataSource
   * Database Driver Vendor: Postgresql
@@ -22,9 +23,11 @@ The last number is the ID of a member. In this case the ID is 1. If there is no 
    * User: user01
    * DatabaseName: mydb
    * Password: password
-   * Url: (add the database name. e.g. jdbc:postgresql://localhost/mydb?..)
- 6. Add a JDBC resource
+   * Url: (add the database name. e.g. jdbc:postgresql://localhost/mydb?...)
+ 6. Add a JDBC resource. Resources -> JDBC -> JDBC Resources. Click on "New...".
   * JNDI Name: jdbc/MyDB
   * Pool Name: MyDBPool
+ 7. Add an JVM option for Log4J. Configurations -> server-config -> JVM Settings. Choose "JVM Options" tab. Click on "Add JVM Option". Specify `-Dlog4j.configuration=file:///${com.sun.aas.instanceRoot}/config/log4j.xml`.
+ 8. Restart GlassFish.
 
 Read [Configure Log4J for use in GlassFish 3.1](https://blogs.oracle.com/naman/entry/configure_log4j_for_use_in) on Log4J in GlassFish.
