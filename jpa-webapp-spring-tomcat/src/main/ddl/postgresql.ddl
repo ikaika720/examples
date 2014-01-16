@@ -3,19 +3,26 @@ CREATE DATABASE mydb;
 CREATE USER user01;
 ALTER USER user01 WITH ENCRYPTED PASSWORD 'password';
 
-CREATE TABLE member (
+CREATE TABLE account (
     id bigint primary key,
-    name text,
-    email text,
-    dateOfBirth date
+    balance text not null,
+    lastUpdated timestamp not null
 );
 
-ALTER TABLE member OWNER TO user01;
+ALTER TABLE account OWNER TO user01;
 
-CREATE TABLE member_member (
-    member_id bigint,
-    friends_id bigint,
-    PRIMARY KEY(member_id, friends_id)
+CREATE TABLE transaction (
+    id bigint primary key,
+    account bigint not null,
+    date date not null,
+    amount numeric(10,2) not null,
+    running_balance numeric(12,2) not null,
+    FOREIGN KEY(account) REFERENCES account(id)
 );
 
-ALTER TABLE member_member OWNER TO user01;
+ALTER TABLE transaction OWNER TO user01;
+
+CREATE SEQUENCE transaction_id_seq;
+
+ALTER SEQUENCE transaction_id_seq OWNER TO user01;
+
