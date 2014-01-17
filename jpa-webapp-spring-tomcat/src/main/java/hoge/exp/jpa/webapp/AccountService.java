@@ -48,8 +48,6 @@ public class AccountService {
 
         em.persist(trn1);
         em.persist(trn2);
-        em.persist(act1);
-        em.persist(act2);
     }
 
     @Transactional
