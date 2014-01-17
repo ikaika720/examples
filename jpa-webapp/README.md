@@ -1,6 +1,6 @@
 JPA web application examples
 ============
-This examples use JPA 2.1, Hibernate 4.3 and PostgreSQL 9.3.
+This examples use JPA 2.1 and PostgreSQL 9.3.
 
 Access following link by your web browser after deployment of the application.
 
