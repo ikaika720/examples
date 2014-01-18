@@ -4,10 +4,12 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@NamedQuery(name = "Member.findAll", query = "SELECT m FROM Member m ORDER BY m.id")
 public class Member {
     @Id
     private long id;

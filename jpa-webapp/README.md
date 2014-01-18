@@ -23,3 +23,24 @@ The last number is the ID of a member. In this case the ID is 1. If there is no 
  4. Add a JDBC resource
   * JNDI Name: jdbc/MyDB
   * Pool Name: MyDBPool
+
+## WildFly 8.0.0.0.CR1 memo
+Below is assumed standalone mode.
+
+ * Deploy JDBC Driver
+       %WF_HOME%\bin\jboss-cli.bat
+       deploy \path\to\postgresql-9.3-1100-jdbc41.jar
+ * Add an admin user
+       %WF_HOME%\bin\add-user.bat
+ * Set up datasource
+  1. Go to http://localhost:9990/
+  2. Go Profile -> Subsystems -> Connector -> Datasources, and click on Add.
+ * Deploy an application
+       %WF_HOME%\bin\jboss-cli.bat
+       deploy \path\to\jpa-webapp.war
+ * Update an already deployed application
+       %WF_HOME%\bin\jboss-cli.bat
+       deploy --force \path\to\jpa-webapp.war
+    That works, but is this correct?
+
+For further information, read [WildFly 8 Documentation](https://docs.jboss.org/author/display/WFLY8/Documentation).

@@ -20,6 +20,16 @@ public class MemberREST {
     MemberService ms;
 
     @GET
+    @Produces("text/html")
+    public Response listAll() {
+        StringBuilder sb = new StringBuilder();
+        for (Member m : ms.getAll()) {
+            sb.append(m.toString()).append("<br>\r\n");
+        }
+        return Response.ok(sb.toString()).build();
+    }
+
+    @GET
     @Path("{id}")
     @Produces("text/html")
     public Response getById(@PathParam("id") long id) {

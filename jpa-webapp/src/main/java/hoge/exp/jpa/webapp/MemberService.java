@@ -1,5 +1,7 @@
 package hoge.exp.jpa.webapp;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -23,5 +25,9 @@ public class MemberService {
         em.find(Member.class, member.getId(), LockModeType.PESSIMISTIC_WRITE);
         Member m = em.merge(member);
         return m;
+    }
+
+    public List<Member> getAll() {
+        return em.createNamedQuery("Member.findAll", Member.class).getResultList();
     }
 }
