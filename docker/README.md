@@ -4,6 +4,7 @@ Docker examples
 See [docker configure networking](http://docs.docker.io/en/latest/use/networking/) and [pipework](https://github.com/jpetazzo/pipework).
 
 Vagrantfile
+
     Vagrant.configure("2") do |config|
       config.vm.network :private_network, ip: "192.168.33.20", adapter: 2
       config.vm.provider :virtualbox do |vb, override|
@@ -15,8 +16,9 @@ Vagrantfile
 See [VirtualBox Configuration](http://docs.vagrantup.com/v2/virtualbox/configuration.html) and [VBoxManage](http://www.virtualbox.org/manual/ch08.html) about Vagrant and VirtualBox configuration.
 
 Docker VM
+
     sudo apt-get -y install git
-	git clone https://github.com/jpetazzo/pipework.git
+    git clone https://github.com/jpetazzo/pipework.git
     sudo ip addr flush dev eth1
     sudo brctl addbr br1
     sudo brctl addif br1 eth1
