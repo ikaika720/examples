@@ -7,5 +7,12 @@
                     value="org.eclipse.persistence.logging.DefaultSessionLog"/>
             <property name="eclipselink.logging.level" value="FINE"/>
         </properties>
+        <!-- Wildfly -->
+        <!--
+        <jta-data-source>java:jboss/datasources/MyDB</jta-data-source>
+        <properties>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+        -->
     </persistence-unit>
 </persistence>
