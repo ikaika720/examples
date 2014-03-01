@@ -1,11 +1,3 @@
-CREATE DATABASE mydb;
-
-CREATE USER user01;
-ALTER USER user01 WITH ENCRYPTED PASSWORD 'password';
-
---DROP TABLE transaction;
---DROP TABLE account;
---DROP SEQUENCE transaction_id_seq;
 CREATE TABLE account (
     id bigint primary key,
     balance numeric(12,2) not null,

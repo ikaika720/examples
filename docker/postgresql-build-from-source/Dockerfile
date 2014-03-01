@@ -10,17 +10,20 @@ RUN cd postgresql-9.3.3;\
   ./configure --prefix=/usr/local/postgresql-9.3.3;\
   make;\
   make install
+RUN ln -s /usr/local/postgresql-9.3.3 /usr/local/postgresql
 RUN mkdir -p /var/lib/pgsql/data
 RUN useradd postgres
 RUN chown postgres:postgres /var/lib/pgsql/data
-RUN su postgres -c "/usr/local/postgresql-9.3.3/bin/initdb -D /var/lib/pgsql/data"
+RUN su postgres -c "/usr/local/postgresql/bin/initdb -D /var/lib/pgsql/data"
 RUN echo "host    all             all             0.0.0.0/0               md5" >> /var/lib/pgsql/data/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /var/lib/pgsql/data/postgresql.conf
-RUN su postgres -c "/usr/local/postgresql-9.3.3/bin/pg_ctl -D /var/lib/pgsql/data/ start";\
+RUN su postgres -c "/usr/local/postgresql/bin/pg_ctl -D /var/lib/pgsql/data/ start";\
   sleep 10;\
-  su postgres -c "/usr/local/postgresql-9.3.3/bin/psql -U postgres -d postgres -c \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'password';\""
+  su postgres -c "/usr/local/postgresql/bin/psql -U postgres -d postgres -c \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'password';\"";\
+  su postgres -c "/usr/local/postgresql/bin/pg_ctl -D /var/lib/pgsql/data/ stop";\
+  sleep 10
 
 EXPOSE 5432
 
-USER postgres
-CMD ["/usr/local/postgresql-9.3.3/bin/postgres","-D","/var/lib/pgsql/data"]
+CMD su postgres -c "/usr/local/postgresql/bin/postgres -D /var/lib/pgsql/data"
+

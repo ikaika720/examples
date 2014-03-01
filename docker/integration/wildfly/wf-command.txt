@@ -1,0 +1,11 @@
+deploy postgresql-9.3-1101.jdbc41.jar
+data-source add \
+    --name=MyDB \
+    --driver-name=postgresql-9.3-1101.jdbc41.jar \
+    --connection-url=jdbc:postgresql://[servername]/mydb \
+    --jndi-name=java:jboss/datasources/MyDB \
+    --user-name=user01 \
+    --password=password \
+    --max-pool-size=25 \
+    --enabled=true
+deploy jpa-webapp-spring.war
