@@ -17,7 +17,7 @@ See [VirtualBox Configuration](http://docs.vagrantup.com/v2/virtualbox/configura
 
 Docker VM
 
-    sudo apt-get -y install git
+    sudo apt-get -y install git iputils-arping
     git clone https://github.com/jpetazzo/pipework.git
     sudo ip addr flush dev eth1
     sudo brctl addbr br1
@@ -27,3 +27,5 @@ Docker VM
     sudo pipework/pipework br1 <container_id> 192.168.1.1/24
 
 See [NetworkConnectionBridge](https://help.ubuntu.com/community/NetworkConnectionBridge) about network bridge on Ubuntu.
+
+If you faced the VirtualBox VM starts too slow due to the boot time network configuration, see [`vagrant up` hangs at "Waiting for VM to boot. This can take a few minutes"](https://github.com/mitchellh/vagrant/wiki/%60vagrant-up%60-hangs-at-%22Waiting-for-VM-to-boot.-This-can-take-a-few-minutes%22).
