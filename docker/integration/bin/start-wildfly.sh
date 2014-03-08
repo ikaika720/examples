@@ -2,19 +2,35 @@
 
 . ./env.sh
 
-echo "Starting as1."
-status=`sudo docker ps -a | grep 'as1 *$' | sed 's/.*\(Up\|Exit\).*/\1/'`
-if [ -n $status ]; then
-  echo "Removing old as1."
-  if [ "$status" = "Up" ]; then
-    sudo docker stop as1
-  fi
-  sudo docker rm as1
-  echo "Old as1 removed."
+num=1
+if [ -n "$1" ]; then
+  num=$1
 fi
-sudo docker run -d -name as1 $tagprefix/int_wildfly
-sudo $baseDir/pipework/pipework $bridgeName as1 $as1_ip/$netmask
+
+start_as () {
+  echo "Starting $1."
+  local status=`sudo docker ps -a | grep "$1 *$" | sed 's/.*\(Up\|Exit\).*/\1/'`
+  if [ -n $status ]; then
+    echo "Removing old $1."
+    if [ "$status" = "Up" ]; then
+      sudo docker stop $1
+    fi
+    sudo docker rm $1
+    echo "Old $1 removed."
+  fi
+  sudo docker run -d -name $1 $tagprefix/int_wildfly
+  sudo $baseDir/pipework/pipework $bridgeName $1 $2/$netmask
+  echo "$1 started. (IP address=$2/$netmask)"
+}
+
+ip_pref=`echo $as1_ip | sed 's/\([0-9.]\+\.\)[0-9]\+/\1/'`
+ip_suf=`echo $as1_ip | sed 's/[0-9.]\+\.\([0-9]\+\)/\1/'`
+last=`expr $num - 1`
+for i in `seq 0 $last`
+do
+  start_as "as`expr $i + 1`" "$ip_pref`expr $ip_suf + $i`"
+done
+
 # Wait Wildfly boot.
 sleep 20
-echo "as1 started. (IP address=$as1_ip/$netmask)"
 

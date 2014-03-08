@@ -1,8 +1,8 @@
 Docker multiple container integration example
 ===============
-This example uses three containers - 1) database (PostgreSQL), 2) Java application server (Wildfly), 3) virtual client (JMeter).
+This example uses four types of containers - 1) database (PostgreSQL), 2) Java application server (Wildfly), 3) load balancer (nginx), 4) virtual client (JMeter).
 
-  JMeter -> Wildfly (172.24.0.41:8080)-> PostgreSQL (172.24.0.11:5432)
+  JMeter -> nginx (172.24.0.21:80) -> Wildfly (172.24.0.41:8080)-> PostgreSQL (172.24.0.11:5432)
 
 To run this example, run bin/start.sh.
 
