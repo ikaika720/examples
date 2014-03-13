@@ -10,6 +10,7 @@ RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.52/bin/apache-t
 RUN wget -q http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.52/bin/apache-tomcat-7.0.52.tar.gz
 RUN md5sum -c apache-tomcat-7.0.52.tar.gz.md5
 RUN tar xzf apache-tomcat-7.0.52.tar.gz -C /opt
+RUN rm /apache-tomcat-*.tar.gz*
 RUN ln -s /opt/apache-tomcat-7.0.52 /opt/apache-tomcat
 
 ADD tomcat-users.xml /opt/apache-tomcat-7.0.52/conf/tomcat-users.xml
