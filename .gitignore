@@ -1,0 +1,7 @@
+docker/integration/jmeter
+docker/integration/maven/jpa-webapp-spring*
+docker/integration/maven/postgresql*
+docker/integration/pipework
+docker/integration/postgresql/*.sql
+docker/integration/wildfly/jpa-webapp-spring.war
+

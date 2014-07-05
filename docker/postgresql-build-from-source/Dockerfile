@@ -1,19 +1,20 @@
-FROM ubuntu:latest
-RUN apt-get update
-RUN apt-get -y install wget build-essential libreadline-dev zlib1g-dev
-RUN wget -q http://ftp.postgresql.org/pub/source/v9.3.4/postgresql-9.3.4.tar.gz.sha256
-RUN wget -q http://ftp.postgresql.org/pub/source/v9.3.4/postgresql-9.3.4.tar.gz
-RUN sha256sum -c postgresql-9.3.4.tar.gz.sha256
-RUN tar xzf postgresql-9.3.4.tar.gz
-RUN cd postgresql-9.3.4;\
-  chmod +x configure;\
-  ./configure --prefix=/usr/local/postgresql-9.3.4;\
-  make;\
-  make install
-RUN ln -s /usr/local/postgresql-9.3.4 /usr/local/postgresql
-RUN mkdir -p /var/lib/pgsql/data
-RUN useradd postgres
-RUN chown postgres:postgres /var/lib/pgsql/data
+FROM ubuntu:14.04
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install wget build-essential libreadline-dev zlib1g-dev &&\
+  apt-get clean && rm -Rf /var/cache/*
+RUN wget -P /tmp -q http://ftp.postgresql.org/pub/source/v9.3.4/postgresql-9.3.4.tar.gz.sha256 &&\
+  wget -P /tmp -q http://ftp.postgresql.org/pub/source/v9.3.4/postgresql-9.3.4.tar.gz &&\
+  cd /tmp &&\
+  sha256sum -c postgresql-9.3.4.tar.gz.sha256 &&\
+  tar xzf postgresql-9.3.4.tar.gz &&\
+  cd postgresql-9.3.4 &&\
+  chmod +x configure &&\
+  ./configure --prefix=/usr/local/postgresql &&\
+  make &&\
+  make install &&\
+  mkdir -p /var/lib/pgsql/data &&\
+  useradd postgres &&\
+  chown postgres:postgres /var/lib/pgsql/data &&\
+  rm -rf /tmp/postgresql*
 RUN su postgres -c "/usr/local/postgresql/bin/initdb -D /var/lib/pgsql/data"
 RUN echo "host    all             all             0.0.0.0/0               md5" >> /var/lib/pgsql/data/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /var/lib/pgsql/data/postgresql.conf

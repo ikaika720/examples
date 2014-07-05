@@ -1,4 +1,4 @@
-deploy postgresql-9.3-1101.jdbc41.jar
+deploy /tmp/postgresql-9.3-1101.jdbc41.jar
 data-source add \
     --name=MyDB \
     --driver-name=postgresql-9.3-1101.jdbc41.jar \
@@ -8,4 +8,4 @@ data-source add \
     --password=password \
     --max-pool-size=25 \
     --enabled=true
-deploy jpa-webapp-spring.war
+deploy /tmp/jpa-webapp-spring.war

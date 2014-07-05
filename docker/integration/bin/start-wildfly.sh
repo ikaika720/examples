@@ -9,16 +9,13 @@ fi
 
 start_as () {
   echo "Starting $1."
-  local status=`sudo docker ps -a | grep "$1 *$" | sed 's/.*\(Up\|Exit\).*/\1/'`
-  if [ -n $status ]; then
+  status=$(sudo docker ps -a | grep " *$1 *$")
+  if [ -n "$status" ]; then
     echo "Removing old $1."
-    if [ "$status" = "Up" ]; then
-      sudo docker stop $1
-    fi
-    sudo docker rm $1
+    sudo docker rm -f $1
     echo "Old $1 removed."
   fi
-  sudo docker run -d -name $1 $tagprefix/int_wildfly
+  sudo docker run -d --name $1 $tagprefix/int_wildfly
   sudo $baseDir/pipework/pipework $bridgeName $1 $2/$netmask
   echo "$1 started. (IP address=$2/$netmask)"
 }
