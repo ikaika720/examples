@@ -1,7 +1,7 @@
-deploy /tmp/postgresql-9.3-1101.jdbc41.jar
+deploy /tmp/postgresql-9.3-1102.jdbc41.jar
 data-source add \
     --name=MyDB \
-    --driver-name=postgresql-9.3-1101.jdbc41.jar \
+    --driver-name=postgresql-9.3-1102.jdbc41.jar \
     --connection-url=jdbc:postgresql://172.24.0.11/mydb \
     --jndi-name=java:jboss/datasources/MyDB \
     --user-name=user01 \

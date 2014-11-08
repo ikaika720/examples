@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:14.10
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install -y software-properties-common &&\
   add-apt-repository -y ppa:webupd8team/java &&\
