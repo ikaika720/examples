@@ -71,7 +71,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        DecimalFormat format = new DecimalFormat(Constants.DECIMAL_CORMAT);
+        DecimalFormat format = new DecimalFormat(Constants.DECIMAL_FORMAT);
         return String.format("Transaction [id=%s, account=%s, date=%s, amount=%s, runningBalance=%s]",
                 id, account, date,
                 format.format(amount), format.format(runningBalance));

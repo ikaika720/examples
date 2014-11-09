@@ -30,10 +30,10 @@ public class AccountController {
     @ResponseBody
     public ResponseEntity<String> getAllAccounts() {
         StringBuilder sb = new StringBuilder();
-        for (Account a : as.getAllAccounts()) {
+        as.getAllAccounts().forEach(a -> {
             sb.append(a.toString());
             sb.append("\r\n");
-        }
+        });
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
@@ -44,10 +44,10 @@ public class AccountController {
     @ResponseBody
     public ResponseEntity<String> getAllTransactions() {
         StringBuilder sb = new StringBuilder();
-        for (Transaction t : as.getAllTransactions()) {
+        as.getAllTransactions().forEach(t -> {
             sb.append(t.toString());
             sb.append("\r\n");
-        }
+        });
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);

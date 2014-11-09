@@ -56,6 +56,6 @@ public class Account {
     @Override
     public String toString() {
         return String.format("Account [id=%s, balance=%s, lastUpdated=%s]",
-                id, new DecimalFormat(Constants.DECIMAL_CORMAT).format(balance), lastUpdated);
+                id, new DecimalFormat(Constants.DECIMAL_FORMAT).format(balance), lastUpdated);
     }
 }
