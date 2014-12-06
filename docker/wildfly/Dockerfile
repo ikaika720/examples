@@ -7,8 +7,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install -y softw
   apt-get clean && rm -Rf /var/cache/*
 
 RUN cd /opt &&\
-  wget -qO- http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.tar.gz | tar xzf - &&\
-  mv wildfly-8.1.0.Final wildfly
+  wget -qO- http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.tar.gz | tar xzf - &&\
+  mv wildfly-8.2.0.Final wildfly
 
 ADD standalone.xml  /opt/wildfly/standalone/configuration/standalone.xml
 ADD mgmt-groups.properties /opt/wildfly/standalone/configuration/mgmt-groups.properties

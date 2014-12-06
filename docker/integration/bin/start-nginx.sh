@@ -14,6 +14,7 @@ if [ -n "$1" ]; then
   done
 fi
 
+cp $baseDir/nginx/nginx.conf.template $baseDir/nginx/nginx.conf
 sed -i "s/\(upstream \+.\+ *{\).*}/\1$as_ips}/" $baseDir/nginx/nginx.conf
 
 echo "Starting lb1."
