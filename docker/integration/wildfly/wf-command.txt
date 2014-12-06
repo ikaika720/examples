@@ -7,5 +7,6 @@ data-source add \
     --user-name=user01 \
     --password=password \
     --max-pool-size=25 \
+    --blocking-timeout-wait-millis=3000 \
     --enabled=true
 deploy /tmp/jpa-webapp-spring.war

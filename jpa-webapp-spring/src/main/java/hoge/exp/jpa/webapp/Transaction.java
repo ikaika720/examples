@@ -9,13 +9,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@NamedQuery(name = "Transaction.findAll", query = "SELECT t FROM Transaction t ORDER BY t.account, t.id")
+@NamedQueries({
+    @NamedQuery(name = "Transaction.findAll", query = "SELECT t FROM Transaction t ORDER BY t.account, t.id"),
+    @NamedQuery(name = "Transaction.getTransactionsByAccountId", query = "SELECT t FROM Transaction t WHERE t.account = :accountId ORDER BY t.id")
+})
 public class Transaction {
     @Id
     @SequenceGenerator(name = "transactionIdSeq", sequenceName = "transaction_id_seq",

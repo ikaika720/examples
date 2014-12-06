@@ -79,8 +79,21 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
+    public Account getAccount(long id) {
+        return em.find(Account.class, id);
+    }
+
+    @Transactional(readOnly = true)
     public List<Transaction> getAllTransactions() {
         return em.createNamedQuery("Transaction.findAll", Transaction.class).getResultList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Transaction> getTransactionsByAccountId(long accountId) {
+        return em.createNamedQuery(
+                "Transaction.getTransactionsByAccountId", Transaction.class)
+                .setParameter("accountId", accountId)
+                .getResultList();
     }
 
     public BigDecimal getDecimalValue(String value) {

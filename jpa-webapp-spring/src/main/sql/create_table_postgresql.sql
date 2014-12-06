@@ -17,7 +17,10 @@ CREATE TABLE transaction (
 
 ALTER TABLE transaction OWNER TO user01;
 
+CREATE INDEX transaction_account_index ON transaction(account);
+
+ALTER INDEX transaction_account_index OWNER TO user01;
+
 CREATE SEQUENCE transaction_id_seq START WITH 100;
 
 ALTER SEQUENCE transaction_id_seq OWNER TO user01;
-
