@@ -1,12 +1,12 @@
 FROM ubuntu:14.10
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install wget build-essential libreadline-dev zlib1g-dev &&\
   apt-get clean && rm -Rf /var/cache/*
-RUN wget -P /tmp -q http://ftp.postgresql.org/pub/source/v9.4.0/postgresql-9.4.0.tar.gz.sha256 &&\
-  wget -P /tmp -q http://ftp.postgresql.org/pub/source/v9.4.0/postgresql-9.4.0.tar.gz &&\
+RUN wget -P /tmp -q http://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.gz.sha256 &&\
+  wget -P /tmp -q http://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.gz &&\
   cd /tmp &&\
-  sha256sum -c postgresql-9.4.0.tar.gz.sha256 &&\
-  tar xzf postgresql-9.4.0.tar.gz &&\
-  cd postgresql-9.4.0 &&\
+  sha256sum -c postgresql-9.4.1.tar.gz.sha256 &&\
+  tar xzf postgresql-9.4.1.tar.gz &&\
+  cd postgresql-9.4.1 &&\
   chmod +x configure &&\
   ./configure --prefix=/usr/local/postgresql &&\
   make &&\

@@ -1,6 +1,6 @@
 FROM inabatk/wildfly
 
-RUN wget -P /tmp -q http://jdbc.postgresql.org/download/postgresql-9.3-1102.jdbc41.jar
+RUN wget -P /tmp -q http://jdbc.postgresql.org/download/postgresql-9.4-1200.jdbc41.jar
 
 ADD jpa-webapp-spring.war /tmp/jpa-webapp-spring.war
 ADD wf-command.txt /tmp/wf-command.txt
