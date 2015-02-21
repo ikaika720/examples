@@ -1,5 +1,6 @@
 package hoge.exp.jpa.webapp;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,16 @@ public class AccountController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         return new ResponseEntity<String>(sb.toString(), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping("/account/totalBalance")
+    @ResponseBody
+    public ResponseEntity<String> getTotalBalance() {
+        BigDecimal totalBalance = as.getTotalBalance();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        return new ResponseEntity<String>(totalBalance.toString(), headers, HttpStatus.OK);
     }
 
     @RequestMapping("/account/transfer")

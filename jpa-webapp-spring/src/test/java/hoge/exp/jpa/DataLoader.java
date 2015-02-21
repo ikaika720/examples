@@ -13,11 +13,11 @@ public class DataLoader {
     private static final String DEFAULT_DB_PASSWD = "password";
 
     public static void main(String[] args) {
-        int numOfRecordToInsert = args.length > 1
+        int numOfRecordToInsert = args.length > 0
                 ? Integer.parseInt(args[0]) : DEFAULT_NUM_OF_RCD;
-        String databaseURL = args.length > 2 ? args[1] : DEFAULT_DB_URL;
-        String user = args.length > 3 ? args[2] : DEFAULT_DB_USER;
-        String password = args.length > 4 ? args[3] : DEFAULT_DB_PASSWD;
+        String databaseURL = args.length > 1 ? args[1] : DEFAULT_DB_URL;
+        String user = args.length > 2 ? args[2] : DEFAULT_DB_USER;
+        String password = args.length > 3 ? args[3] : DEFAULT_DB_PASSWD;
 
         try {
             Class.forName("org.postgresql.Driver");

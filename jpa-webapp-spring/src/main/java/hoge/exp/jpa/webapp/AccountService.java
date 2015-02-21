@@ -99,4 +99,15 @@ public class AccountService {
     public BigDecimal getDecimalValue(String value) {
         return new BigDecimal(value).setScale(2, RoundingMode.DOWN);
     }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getTotalBalance() {
+        BigDecimal totalBalance = em.createNamedQuery(
+                "Account.getTotalBalance", BigDecimal.class).getSingleResult();
+        if (totalBalance == null) {
+            return BigDecimal.valueOf(0, 2);
+        } else {
+            return totalBalance;
+        }
+    }
 }
