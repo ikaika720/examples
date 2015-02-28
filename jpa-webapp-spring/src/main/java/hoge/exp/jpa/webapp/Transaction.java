@@ -15,61 +15,45 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Transaction.findAll", query = "SELECT t FROM Transaction t ORDER BY t.account, t.id"),
     @NamedQuery(name = "Transaction.getTransactionsByAccountId", query = "SELECT t FROM Transaction t WHERE t.account = :accountId ORDER BY t.id")
 })
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Transaction {
     @Id
     @SequenceGenerator(name = "transactionIdSeq", sequenceName = "transaction_id_seq",
         allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionIdSeq")
+    @Setter
+    @Getter
     private long id;
+    @Setter
+    @Getter
     private long account;
     @Temporal(TemporalType.DATE)
+    @Setter
+    @Getter
     private Date date;
+    @Setter
+    @Getter
     private BigDecimal amount;
     @Column(name = "running_balance")
+    @Setter
+    @Getter
     private BigDecimal runningBalance;
-
-    public Transaction() {}
 
     public Transaction(long account, Date date, BigDecimal amount, BigDecimal runningBalance) {
         this.account = account;
         this.date = date;
         this.amount = amount;
-        this.runningBalance = runningBalance;
-    }
-
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-    public long getAccount() {
-        return account;
-    }
-    public void setAccount(long account) {
-        this.account = account;
-    }
-    public Date getDate() {
-        return date;
-    }
-    public void setDate(Date date) {
-        this.date = date;
-    }
-    public BigDecimal getAmount() {
-        return amount;
-    }
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-    public BigDecimal getRunningBalance() {
-        return runningBalance;
-    }
-    public void setRunningBalance(BigDecimal runningBalance) {
         this.runningBalance = runningBalance;
     }
 
