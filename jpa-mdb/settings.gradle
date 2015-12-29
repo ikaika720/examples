@@ -1,0 +1,5 @@
+include 'jpa-mdb-ear'
+include 'jpa-mdb-client'
+include 'jpa-mdb-ejbjar'
+
+rootProject.name = 'jpa-mdb'

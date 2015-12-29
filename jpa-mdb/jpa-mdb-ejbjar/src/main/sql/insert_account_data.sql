@@ -1,0 +1,10 @@
+INSERT INTO account VALUES(1, 100, current_timestamp);
+INSERT INTO account VALUES(2, 200, current_timestamp);
+INSERT INTO account VALUES(3, 300, current_timestamp);
+INSERT INTO account VALUES(4, 400, current_timestamp);
+INSERT INTO account VALUES(5, 500, current_timestamp);
+INSERT INTO account VALUES(6, 600, current_timestamp);
+INSERT INTO account VALUES(7, 700, current_timestamp);
+INSERT INTO account VALUES(8, 800, current_timestamp);
+INSERT INTO account VALUES(9, 900, current_timestamp);
+INSERT INTO account VALUES(10, 1000, current_timestamp);
