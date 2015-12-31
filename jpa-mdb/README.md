@@ -55,6 +55,10 @@ INFO: JBoss Remoting version 4.0.9.Final
      --max-pool-size=25 \
      --blocking-timeout-wait-millis=3000 \
      --enabled=true</code></pre>
+ * Add queues<br>
+   <pre><code>$WF_HOME/bin/jboss-cli.sh
+   jms-queue add --queue-address=MyReqQueue --entries=java:/jms/queue/MyReqQueue
+   jms-queue add --queue-address=MyResQueue --entries=java:/jms/queue/MyResQueue</code></pre>
  * Deploy an application<br>
    <pre><code>$WF_HOME/bin/jboss-cli.sh
    deploy /path/to/jpa-mdb.ear</code></pre>
