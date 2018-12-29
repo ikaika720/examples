@@ -43,11 +43,6 @@ public class SampleRequestResponseServer {
     }
 
     @Bean
-    SampleRequestResponseServer sampleRequestResponseServer() {
-    	return new SampleRequestResponseServer();
-    }
-
-    @Bean
     ConnectionFactory connectionFactory() {
     	return new ActiveMQConnectionFactory(brokerURL);
     }
