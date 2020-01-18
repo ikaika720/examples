@@ -6,10 +6,13 @@ import hoge.exp.jpa.webapp.Transaction;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class Main {
-
+	private static final Log log = LogFactory.getLog(Main.class);
+	
     public static void main(String[] args) {
         FileSystemXmlApplicationContext ctx =
                 new FileSystemXmlApplicationContext(
@@ -31,11 +34,11 @@ public class Main {
             }
 
             for (Account a : as.getAllAccounts()) {
-                System.out.println(a.toString());
+                log.info(a.toString());
             }
 
             for (Transaction t : as.getAllTransactions()) {
-                System.out.println(t.toString());
+                log.info(t.toString());
             }
 
             as.truncateAllTables();

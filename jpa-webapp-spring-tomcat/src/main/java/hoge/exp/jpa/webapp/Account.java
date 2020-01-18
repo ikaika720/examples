@@ -1,15 +1,13 @@
 package hoge.exp.jpa.webapp;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a ORDER BY a.id")
@@ -17,8 +15,7 @@ public class Account {
     @Id
     private long id;
     private BigDecimal balance;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdated;
+    private LocalDateTime lastUpdated;
 
     public Account() {}
 
@@ -27,7 +24,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(long id, BigDecimal balance, Date lastUpdated) {
+    public Account(long id, BigDecimal balance, LocalDateTime lastUpdated) {
         this.id = id;
         this.balance = balance;
         this.lastUpdated = lastUpdated;
@@ -36,7 +33,7 @@ public class Account {
     @PrePersist
     @PreUpdate
     private void currentTimestamp() {
-        lastUpdated = new Date();
+        lastUpdated = LocalDateTime.now();
     }
 
     public long getId() {
@@ -51,10 +48,10 @@ public class Account {
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
-    public Date getLastUpdated() {
+    public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
