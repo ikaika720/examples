@@ -1,3 +1,3 @@
 JPA stand-alone examples
 ============
-This examples use JPA 2.1, Hibernate 4.3 and PostgreSQL 9.3.
+This examples use JPA 2.2, Hibernate 5.4 and PostgreSQL 12.1.

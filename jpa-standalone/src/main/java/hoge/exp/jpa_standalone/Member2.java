@@ -1,12 +1,14 @@
 package hoge.exp.jpa_standalone;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -17,13 +19,17 @@ public class Member2 {
     private long id;
     private String name;
     private String email;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+    		name = "member_member", 
+    		joinColumns = @JoinColumn(name = "member_id"), 
+    		inverseJoinColumns = @JoinColumn(name = "friends_id"))
     private Collection<Member2> friends;
 
     public Member2() {}
 
-    public Member2(long id, String name, String email, Date dateOfBirth) {
+    public Member2(long id, String name, String email, LocalDate dateOfBirth) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -49,10 +55,10 @@ public class Member2 {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -1,6 +1,6 @@
 package hoge.exp.jpa_standalone;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,7 +19,7 @@ public class SimpleCRUD {
             // create
             {
                 transaction.begin();
-                Member member = new Member(0, "Andrea", "andrea@email.com", new Date());
+                Member member = new Member(0, "Andrea", "andrea@email.com", LocalDate.now());
                 em.persist(member);
                 transaction.commit();
             }

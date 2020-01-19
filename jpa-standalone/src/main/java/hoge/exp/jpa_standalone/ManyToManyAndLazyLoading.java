@@ -1,6 +1,6 @@
 package hoge.exp.jpa_standalone;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,9 +23,9 @@ public class ManyToManyAndLazyLoading {
             // create
             {
                 transaction.begin();
-                Member2 member1 = new Member2(0, "member01", "member01@email.com", new Date());
-                Member2 member2 = new Member2(1, "member02", "member02@email.com", new Date());
-                Member2 member3 = new Member2(2, "member03", "member03@email.com", new Date());
+                Member2 member1 = new Member2(0, "member01", "member01@email.com", LocalDate.now());
+                Member2 member2 = new Member2(1, "member02", "member02@email.com", LocalDate.now());
+                Member2 member3 = new Member2(2, "member03", "member03@email.com", LocalDate.now());
 
                 em.persist(member1);
                 em.persist(member2);

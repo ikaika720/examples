@@ -1,6 +1,6 @@
 package hoge.exp.jpa_standalone;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,11 +15,11 @@ public class Member3 {
     private long id;
     private String name;
     private String email;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     public Member3() {}
 
-    public Member3(long id, String name, String email, Date dateOfBirth) {
+    public Member3(long id, String name, String email, LocalDate dateOfBirth) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -44,10 +44,10 @@ public class Member3 {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -1,6 +1,6 @@
 package hoge.exp.jpa_standalone;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -35,7 +35,7 @@ public class NamedQueryAndPagination {
 
                 for (int i = 0; i < numOfRecords; i++) {
                     Member3 member = new Member3(i, String.format(memberFormat, i),
-                            String.format(emailFormat, i), new Date());
+                            String.format(emailFormat, i), LocalDate.now());
                     em.persist(member);
                 }
 
