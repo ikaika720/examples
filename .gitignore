@@ -1,3 +1,9 @@
+**/.classpath
+**/.project
+**/.settings
+
+jpa-webapp-spring/target
+
 docker/integration/jmeter
 docker/integration/maven/jpa-webapp-spring*
 docker/integration/maven/postgresql*
