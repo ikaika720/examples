@@ -19,7 +19,7 @@ public class AccountController {
     @Autowired
     AccountService as;
 
-    @RequestMapping(value = "/account/new")
+    @RequestMapping("/account/new")
     @ResponseBody
     public ResponseEntity<String> createAccount(
             @RequestParam long id, @RequestParam String balance) {
@@ -30,7 +30,7 @@ public class AccountController {
         return new ResponseEntity<String>(act.toString(), headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/account/list")
+    @RequestMapping("/account/list")
     @ResponseBody
     public ResponseEntity<String> getAllAccounts() {
         StringBuilder sb = new StringBuilder();
@@ -44,7 +44,7 @@ public class AccountController {
         return new ResponseEntity<String>(sb.toString(), headers, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/account/{id}")
+    @RequestMapping("/account/{id}")
     @ResponseBody
     public ResponseEntity<String> getAccount(@PathVariable("id") long id) {
         Account account = as.getAccount(id);
