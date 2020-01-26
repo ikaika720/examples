@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>JPA example</title>
+    </head>
+    <body>
+        <h1>JPA example</h1>
+        <hr>
+        <div>
+            <h2>Create account</h2>
+            <form action="account/new" method="get">
+                Account No. <input type="text" name="id"/><br>
+                Balance <input type="text" name="balance"/><br>
+                <input type="submit" value="Create"/>
+            </form>
+        </div>
+        <hr>
+        <div>
+            <h2>List accounts</h2>
+            <form action="account/list" method="get">
+                <input type="submit" value="List accounts"/>
+            </form>
+        </div>
+        <hr>
+        <div>
+            <h2>List transactions</h2>
+            <form action="transaction/list" method="get">
+                <input type="submit" value="Show transactions"/>
+            </form>
+        </div>
+        <hr>
+        <div>
+            <h2>Transfer</h2>
+            <form action="account/transfer" method="get">
+                Account No. from <input type="text" name="accountFrom"/><br>
+                Account No. to <input type="text" name="accountTo"/><br>
+                Amount <input type="text" name="amount"/><br>
+                Sleep time (ms) <input type="text" name="sleep" value="0"/><br>
+                <input type="submit" value="Transfer"/>
+            </form>
+        </div>
+        <hr>
+        <div>
+            <h2>Clear data</h2>
+            <form action="clear" method="get">
+                <input type="submit" value="Clear data"/>
+            </form>
+        </div>
+    </body>
+</html>
