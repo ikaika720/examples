@@ -6,6 +6,8 @@
 
 */target/
 */bin
+!./activemq-jms/bin
+!./spring-jms/bin
 
 docker/integration/jmeter
 docker/integration/maven/jpa-webapp-spring*

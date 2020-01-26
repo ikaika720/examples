@@ -1,4 +1,0 @@
-datasource:
-    url: jdbc:postgresql:mydb
-    username: user01
-    password: password
