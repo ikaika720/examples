@@ -9,7 +9,7 @@
         <hr>
         <div>
             <h2>Create account</h2>
-            <form action="account/new" method="get">
+            <form action="account/new" method="post">
                 Account No. <input type="text" name="id"/><br>
                 Balance <input type="text" name="balance"/><br>
                 <input type="submit" value="Create"/>
@@ -32,7 +32,7 @@
         <hr>
         <div>
             <h2>Transfer</h2>
-            <form action="account/transfer" method="get">
+            <form action="account/transfer" method="put">
                 Account No. from <input type="text" name="accountFrom"/><br>
                 Account No. to <input type="text" name="accountTo"/><br>
                 Amount <input type="text" name="amount"/><br>
@@ -43,7 +43,7 @@
         <hr>
         <div>
             <h2>Clear data</h2>
-            <form action="clear" method="get">
+            <form action="clear" method="out">
                 <input type="submit" value="Clear data"/>
             </form>
         </div>

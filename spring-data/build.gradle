@@ -32,6 +32,7 @@ dependencies {
     runtimeOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.assertj:assertj-core:3.15.0'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
