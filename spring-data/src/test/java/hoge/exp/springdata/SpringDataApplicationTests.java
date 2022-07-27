@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -189,7 +189,7 @@ class SpringDataApplicationTests {
 
 		{ // Check the transactions
 			ResponseEntity<String> response = restTemplate.getForEntity(
-					  "http://localhost:" + port + "transaction/list", String.class);
+					  "http://localhost:" + port + "/transaction/list", String.class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 

@@ -51,7 +51,7 @@ public class SpringDataApplication {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(ds);
         emf.setJpaVendorAdapter(jva);
-        emf.setPersistenceUnitName("bankPU");
+        emf.setPackagesToScan("hoge.exp.springdata.webapp");
         return emf;
 
     }
