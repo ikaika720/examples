@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
-    @PersistenceContext(unitName = "bankPU")
+    @PersistenceContext
     private EntityManager em;
 
     @Transactional
