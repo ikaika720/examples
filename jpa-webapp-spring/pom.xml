@@ -7,7 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <properties>
         <jackson.version>2.9.10</jackson.version>
-        <spring-framework.version>5.2.4.RELEASE</spring-framework.version>
+        <spring-framework.version>5.3.18</spring-framework.version>
     </properties>
     <dependencies>
         <dependency>
