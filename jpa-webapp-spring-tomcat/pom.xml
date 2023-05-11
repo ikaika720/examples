@@ -6,7 +6,7 @@
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
-        <jackson.version>2.13.4.1</jackson.version>
+        <jackson.version>2.13.4.2</jackson.version>
         <spring-framework.version>5.3.22</spring-framework.version>
     </properties>
     <dependencies>
