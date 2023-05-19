@@ -3,9 +3,9 @@ package hoge.exp.springdata.webapp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceContext;
 
 import org.springframework.transaction.annotation.Transactional;
 
