@@ -1,7 +1,6 @@
 package hoge.exp.springdata.webapp;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -15,10 +14,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class Transaction {
     @Id
     @SequenceGenerator(name = "transactionIdSeq", sequenceName = "transaction_id_seq",
@@ -46,13 +47,5 @@ public class Transaction {
         this.date = date;
         this.amount = amount;
         this.runningBalance = runningBalance;
-    }
-
-    @Override
-    public String toString() {
-        DecimalFormat format = new DecimalFormat(Constants.DECIMAL_FORMAT);
-        return String.format("Transaction [id=%s, account=%s, date=%s, amount=%s, runningBalance=%s]",
-                id, account, date,
-                format.format(amount), format.format(runningBalance));
     }
 }

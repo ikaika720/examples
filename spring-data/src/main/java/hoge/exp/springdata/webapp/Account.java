@@ -1,9 +1,9 @@
 package hoge.exp.springdata.webapp;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -13,20 +13,25 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class Account {
     @Id
     @Setter
     @Getter
     private long id;
+
     @Setter
     @Getter
     private BigDecimal balance;
+
     @Setter
     @Getter
+    @Column(name = "lastupdated")
     private LocalDateTime lastUpdated;
 
     public Account(long id, BigDecimal balance) {
@@ -38,11 +43,5 @@ public class Account {
     @PreUpdate
     private void currentTimestamp() {
         lastUpdated = LocalDateTime.now();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Account [id=%s, balance=%s, lastUpdated=%s]",
-                id, new DecimalFormat(Constants.DECIMAL_FORMAT).format(balance), lastUpdated);
     }
 }

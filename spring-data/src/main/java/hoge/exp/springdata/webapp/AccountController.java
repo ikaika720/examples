@@ -39,7 +39,7 @@ public class AccountController {
     public ResponseEntity<String> getAllAccounts() {
         StringBuilder sb = new StringBuilder();
 
-        ar.findAll().forEach(a -> {
+        ar.findAll(Sort.by(Sort.Order.asc("id"))).forEach(a -> {
             sb.append(a.toString());
             sb.append("\r\n");
         });
