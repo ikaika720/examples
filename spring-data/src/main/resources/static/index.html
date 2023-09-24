@@ -1,51 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>JPA example</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     </head>
     <body>
-        <h1>JPA example</h1>
-        <hr>
-        <div>
-            <h2>Create account</h2>
-            <form action="account/new" method="post">
-                Account No. <input type="text" name="id"/><br>
-                Balance <input type="text" name="balance"/><br>
-                <input type="submit" value="Create"/>
-            </form>
+	    <div class="container py-3">
+	        <div class="mb-lg-3">
+	            <h1>JPA example</h1>
+	        </div>
+	        <div class="mb-lg-3 p-3 border rounded">
+	            <h2>Create account</h2>
+	            <form action="account/new" method="post">
+		            <div class="mb-3">
+		                <label for="createAccountNo" class="form-label">Account No.</label>
+		                <input type="number" class="form-control" id="createAccountNo" name="id">
+		            </div>
+		            <div class="mb-3">
+		                <label for="createBalance" class="form-label">Balance</label>
+		                <input type="number" class="form-control" id="createBalance" name="balance">
+		            </div>
+	                <input type="submit" value="Create" class="btn btn-primary">
+	            </form>
+	        </div>
+	        <div class="mb-lg-3 p-3 border rounded">
+	            <h2>List accounts</h2>
+	            <a href="account/list" class="btn btn-primary">List accounts</a>
+	        </div>
+	        <div class="mb-lg-3 p-3 border rounded">
+	            <h2>List transactions</h2>
+	            <a href="transaction/list" class="btn btn-primary">List transactions</a>
+	        </div>
+	        <div class="mb-lg-3 p-3 border rounded">
+	            <h2>Transfer</h2>
+	            <form action="account/transfer" method="post">
+	                <div class="mb-3">
+	                    <label for="transferAccountNumFrom" class="form-label">Account No. from</label>
+	                    <input type="number" class="form-control" id="transferAccountNumFrom" name="accountFrom">
+	                </div>
+	                <div class="mb-3">
+	                    <label for="transferAccountNumTo" class="form-label">Account No. to</label>
+	                    <input type="number" class="form-control" id="transferAccountNumTo" name="accountTo">
+	                </div>
+	                <div class="mb-3">
+	                    <label for="transferAmount" class="form-label">Amount</label>
+	                    <input type="number" class="form-control" id="transferAmount" name="amount">
+	                </div>
+	                <div class="mb-3">
+	                    <label for="transferSleepTime" class="form-label">Sleep time (ms)</label>
+	                    <input type="number" class="form-control" id="transferSleepTime" name="sleep" value="0">
+	                </div>
+	                <div>
+	                    <input type="submit" value="Transfer" class="btn btn-primary">
+	                </div>
+	            </form>
+	        </div>
+	        <div class="p-3 border rounded">
+	            <h2>Clear data</h2>
+	            <form action="clear" method="post">
+	                <div>
+	                    <input type="submit" value="Clear data" class="btn btn-primary">
+	                </div>
+	            </form>
+	        </div>
         </div>
-        <hr>
-        <div>
-            <h2>List accounts</h2>
-            <form action="account/list" method="get">
-                <input type="submit" value="List accounts"/>
-            </form>
-        </div>
-        <hr>
-        <div>
-            <h2>List transactions</h2>
-            <form action="transaction/list" method="get">
-                <input type="submit" value="Show transactions"/>
-            </form>
-        </div>
-        <hr>
-        <div>
-            <h2>Transfer</h2>
-            <form action="account/transfer" method="put">
-                Account No. from <input type="text" name="accountFrom"/><br>
-                Account No. to <input type="text" name="accountTo"/><br>
-                Amount <input type="text" name="amount"/><br>
-                Sleep time (ms) <input type="text" name="sleep" value="0"/><br>
-                <input type="submit" value="Transfer"/>
-            </form>
-        </div>
-        <hr>
-        <div>
-            <h2>Clear data</h2>
-            <form action="clear" method="out">
-                <input type="submit" value="Clear data"/>
-            </form>
-        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     </body>
 </html>
