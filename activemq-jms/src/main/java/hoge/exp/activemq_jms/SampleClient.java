@@ -1,15 +1,15 @@
 package hoge.exp.activemq_jms;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
+
+import jakarta.jms.Connection;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.MessageConsumer;
+import jakarta.jms.MessageProducer;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 
 public class SampleClient {
 	public static void main(String[] args) {
@@ -17,12 +17,9 @@ public class SampleClient {
 		String queueName = "queue01";
 		String message = "hello";
 
-		ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
+        ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
 
-		Connection conn = null;
-		try {
-			conn = cf.createConnection();
-
+        try (Connection conn = cf.createConnection()) {
 			Session session = conn.createSession(false,
 					Session.AUTO_ACKNOWLEDGE);
 
@@ -41,14 +38,6 @@ public class SampleClient {
 			}
 		} catch (JMSException e) {
 			e.printStackTrace();
-		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 }

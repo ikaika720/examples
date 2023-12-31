@@ -1,13 +1,13 @@
 package hoge.exp.spring_jms;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
+
+import jakarta.jms.Connection;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.MessageProducer;
+import jakarta.jms.Session;
 
 public class SampleClient {
     public static void main(String[] args) {
@@ -17,10 +17,7 @@ public class SampleClient {
 
         ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
 
-        Connection conn = null;
-        try {
-        	conn = cf.createConnection();
-
+        try (Connection conn = cf.createConnection()) {
         	Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         	Destination dest = session.createQueue(queueName);
@@ -29,14 +26,6 @@ public class SampleClient {
         	producer.send(session.createTextMessage(message));
         } catch (JMSException e) {
 			e.printStackTrace();
-		} finally {
-        	if (conn != null) {
-        		try {
-        			conn.close();
-        		} catch (JMSException e) {
-        			e.printStackTrace();
-        		}
-        	}
         }
     }
 }

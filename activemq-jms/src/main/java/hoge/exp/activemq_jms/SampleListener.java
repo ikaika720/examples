@@ -1,38 +1,25 @@
 package hoge.exp.activemq_jms;
 
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
+
+import jakarta.jms.Connection;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageConsumer;
+import jakarta.jms.MessageListener;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 
 public class SampleListener implements MessageListener {
 	public static void main(String[] args) {
 		String brokerURL = "tcp://localhost:61616";
 		String queueName = "queue01";
 
-		ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
-		try {
-			final Connection conn = cf.createConnection();
-			Runtime.getRuntime().addShutdownHook(new Thread() {
-				@Override
-				public void run() {
-					try {
-						conn.close();
-						System.out.println(
-								"The connection was successfully closed.");
-					} catch (JMSException e) {
-						e.printStackTrace();
-					}
-				}
-			});
+        ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
 
+        try (Connection conn = cf.createConnection()) {
 			Session session = conn.createSession(false,
 					Session.AUTO_ACKNOWLEDGE);
 
@@ -42,7 +29,11 @@ public class SampleListener implements MessageListener {
 			consumer.setMessageListener(new SampleListener());
 
 			conn.start();
+
+			Thread.sleep(100);
 		} catch (JMSException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

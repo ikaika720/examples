@@ -1,13 +1,13 @@
 package hoge.exp.spring_jms;
 
-import javax.jms.ConnectionFactory;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.jms.listener.adapter.MessageListenerAdapter;
+
+import jakarta.jms.ConnectionFactory;
 
 @Configuration
 public class SampleTopicSubscriber {

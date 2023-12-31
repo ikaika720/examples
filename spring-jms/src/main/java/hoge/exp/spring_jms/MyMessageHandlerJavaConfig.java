@@ -1,6 +1,6 @@
 package hoge.exp.spring_jms;
 
-import javax.jms.ConnectionFactory;
+import jakarta.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
