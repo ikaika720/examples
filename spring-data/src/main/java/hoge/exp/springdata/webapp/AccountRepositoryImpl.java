@@ -39,13 +39,10 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
         Account act2 = em.find(Account.class, actNum2, LockModeType.PESSIMISTIC_WRITE);
 
         act1.setBalance(act1.getBalance().add(amt1));
-        Transaction trn1 = new Transaction(actNum1, date, amt1, act1.getBalance());
-
         act2.setBalance(act2.getBalance().add(amt2));
-        Transaction trn2 = new Transaction(actNum2, date, amt2, act2.getBalance());
 
-        em.persist(trn1);
-        em.persist(trn2);
+        em.persist(new Transaction(actNum1, date, amt1, act1.getBalance()));
+        em.persist(new Transaction(actNum2, date, amt2, act2.getBalance()));
     }
 
     @Override

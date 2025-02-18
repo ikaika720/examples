@@ -28,7 +28,7 @@ public class AccountController {
     @RequestMapping(value = "/account/new", produces = TEXT_PLAIN_VALUE)
     @ResponseBody
     public ResponseEntity<String> createAccount(
-            @RequestParam long id, @RequestParam String balance) {
+            @RequestParam("id") long id, @RequestParam("balance") String balance) {
         Account act = ar.save(new Account(id, getDecimalValue(balance)));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(act.toString());
@@ -101,9 +101,9 @@ public class AccountController {
 
     @RequestMapping(value = "/account/transfer", produces = TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String transfer(@RequestParam long accountFrom,
-            @RequestParam long accountTo, @RequestParam String amount,
-            @RequestParam long sleep) {
+    public String transfer(@RequestParam("accountFrom") long accountFrom,
+            @RequestParam("accountTo") long accountTo, @RequestParam("amount") String amount,
+            @RequestParam("sleep") long sleep) {
         ar.transfer(accountFrom, accountTo, getDecimalValue(amount), sleep);
 
         return "Completed successfully.";

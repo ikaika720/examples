@@ -8,29 +8,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
+@Data
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class Account {
     @Id
-    @Setter
-    @Getter
     private long id;
 
-    @Setter
-    @Getter
     private BigDecimal balance;
 
-    @Setter
-    @Getter
     @Column(name = "lastupdated")
     private LocalDateTime lastUpdated;
 

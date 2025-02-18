@@ -17,7 +17,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query(value = "TRUNCATE transaction", nativeQuery = true)
     void truncate();
 
-//    @Modifying
     @Transactional
     @Query(value = "SELECT setval('transaction_id_seq', 100)", nativeQuery = true)
     void resetTransactionIdSequence();
