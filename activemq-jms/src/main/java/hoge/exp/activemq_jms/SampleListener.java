@@ -1,9 +1,8 @@
 package hoge.exp.activemq_jms;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
 import jakarta.jms.Connection;
-import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
@@ -15,11 +14,13 @@ import jakarta.jms.TextMessage;
 public class SampleListener implements MessageListener {
 	public static void main(String[] args) {
 		String brokerURL = "tcp://localhost:61616";
+		String username = "artemis";
+		String password = "artemis";
 		String queueName = "queue01";
+		long wait_time = 30_000;
 
-        ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
-
-        try (Connection conn = cf.createConnection()) {
+        try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
+             Connection conn = cf.createConnection(username, password)) {
 			Session session = conn.createSession(false,
 					Session.AUTO_ACKNOWLEDGE);
 
@@ -30,7 +31,8 @@ public class SampleListener implements MessageListener {
 
 			conn.start();
 
-			Thread.sleep(100);
+			System.out.printf("wait %s ms\n", wait_time);
+			Thread.sleep(wait_time);
 		} catch (JMSException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -41,7 +43,9 @@ public class SampleListener implements MessageListener {
 	@Override
 	public void onMessage(Message message) {
 		try {
-			System.out.println(((TextMessage) message).getText());
+			TextMessage textMessage = (TextMessage) message;
+			System.out.println("Message: " + textMessage.getText() + 
+				", Correlation ID: " + textMessage.getJMSCorrelationID());
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}

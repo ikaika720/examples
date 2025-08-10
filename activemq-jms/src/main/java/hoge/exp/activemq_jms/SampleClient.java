@@ -1,9 +1,8 @@
 package hoge.exp.activemq_jms;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
 import jakarta.jms.Connection;
-import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
 import jakarta.jms.MessageConsumer;
@@ -14,12 +13,13 @@ import jakarta.jms.TextMessage;
 public class SampleClient {
 	public static void main(String[] args) {
 		String brokerURL = "tcp://localhost:61616";
+		String username = "artemis";
+		String password = "artemis";
 		String queueName = "queue01";
 		String message = "hello";
 
-        ConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
-
-        try (Connection conn = cf.createConnection()) {
+        try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
+			Connection conn = cf.createConnection(username, password)) {
 			Session session = conn.createSession(false,
 					Session.AUTO_ACKNOWLEDGE);
 
