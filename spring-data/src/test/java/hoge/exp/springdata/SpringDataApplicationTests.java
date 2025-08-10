@@ -165,8 +165,8 @@ class SpringDataApplicationTests {
 			map.add("sleep", "250");
 
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-			ResponseEntity<String> response = restTemplate.exchange(
-					  "http://localhost:" + port + "/account/transfer", HttpMethod.PUT, request , String.class);
+			ResponseEntity<String> response = restTemplate.postForEntity(
+					  "http://localhost:" + port + "/account/transfer", request , String.class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		}
