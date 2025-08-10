@@ -1,8 +1,9 @@
 package hoge.exp.spring_jms;
 
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,8 @@ public class SampleRequestResponseServer {
 	private String brokerURL = "tcp://localhost:61616";
 	private String requestDestinationName = "request";
 	private String responseDestinatnionName = "response";
+	private String username = "artemis";
+	private String password = "artemis";
 
 	@Autowired
 	JmsTemplate jmsTemplate;
@@ -36,15 +39,19 @@ public class SampleRequestResponseServer {
 		});
     }
 
-    public static void main(String[] args) {
-    	AnnotationConfigApplicationContext ctx =
-    			new AnnotationConfigApplicationContext(SampleRequestResponseServer.class);
-    	ctx.registerShutdownHook();
+    public static void main(String[] args) throws InterruptedException {
+    	try (AnnotationConfigApplicationContext ctx =
+    			new AnnotationConfigApplicationContext(SampleRequestResponseServer.class)) {
+    		ctx.registerShutdownHook();
+    		
+    		System.out.println("Server started. Press Ctrl+C to stop.");
+    		new CountDownLatch(1).await();
+    	}
     }
 
     @Bean
     ConnectionFactory connectionFactory() {
-    	return new ActiveMQConnectionFactory(brokerURL);
+    	return new ActiveMQConnectionFactory(brokerURL, username, password);
     }
 
     @Bean
