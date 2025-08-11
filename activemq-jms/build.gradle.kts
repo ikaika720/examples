@@ -16,5 +16,4 @@ repositories {
 
 dependencies {
     implementation("org.apache.activemq:artemis-jakarta-client:2.42.0")
-    implementation("jakarta.jms:jakarta.jms-api:3.1.0")
 }

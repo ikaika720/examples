@@ -2,12 +2,10 @@ package hoge.exp.activemq_jms;
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
-import jakarta.jms.Connection;
 import jakarta.jms.Destination;
+import jakarta.jms.JMSConsumer;
+import jakarta.jms.JMSContext;
 import jakarta.jms.JMSException;
-import jakarta.jms.MessageConsumer;
-import jakarta.jms.Session;
-import jakarta.jms.TextMessage;
 
 public class SampleListener {
 	public static void main(String[] args) {
@@ -16,30 +14,24 @@ public class SampleListener {
 		String password = "artemis";
 		String queueName = "queue01";
 
-		try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
-				Connection conn = cf.createConnection(username, password)) {
-			Session session = conn.createSession(false,
-					Session.AUTO_ACKNOWLEDGE);
+		try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL, username, password);
+				JMSContext ctx = cf.createContext()) {
 
-			Destination dest = session.createQueue(queueName);
+			Destination dest = ctx.createQueue(queueName);
 
-			MessageConsumer consumer = session.createConsumer(dest);
-			consumer.setMessageListener(message -> {
+			JMSConsumer consumer = ctx.createConsumer(dest);
+			consumer.setMessageListener(msg -> {
 				try {
-					TextMessage textMessage = (TextMessage) message;
-					System.out.println("Message: " + textMessage.getText() +
-							", Correlation ID: " + textMessage.getJMSCorrelationID());
+					String body = msg.getBody(String.class);
+					String corrId = msg.getJMSCorrelationID();
+					System.out.println("Message: " + body + ", Correlation ID: " + corrId);
 				} catch (JMSException e) {
 					e.printStackTrace();
 				}
 			});
 
-			conn.start();
-
-    		System.out.println("Message handler started. Press Ctrl+C to stop.");
-    		Thread.currentThread().join();
-		} catch (JMSException e) {
-			e.printStackTrace();
+			System.out.println("Message handler started. Press Ctrl+C to stop.");
+			Thread.currentThread().join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

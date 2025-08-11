@@ -2,13 +2,10 @@ package hoge.exp.activemq_jms;
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
-import jakarta.jms.Connection;
 import jakarta.jms.Destination;
-import jakarta.jms.JMSException;
-import jakarta.jms.MessageConsumer;
-import jakarta.jms.MessageProducer;
-import jakarta.jms.Session;
-import jakarta.jms.TextMessage;
+import jakarta.jms.JMSConsumer;
+import jakarta.jms.JMSContext;
+import jakarta.jms.JMSProducer;
 
 public class SampleClient {
 	public static void main(String[] args) {
@@ -18,26 +15,18 @@ public class SampleClient {
 		String queueName = "queue01";
 		String message = "hello";
 
-        try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
-			Connection conn = cf.createConnection(username, password)) {
-			Session session = conn.createSession(false,
-					Session.AUTO_ACKNOWLEDGE);
+        try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL, username, password);
+			JMSContext cxt = cf.createContext()) {
 
-			Destination dest = session.createQueue(queueName);
+			Destination dest = cxt.createQueue(queueName);
 
-			MessageProducer producer = session.createProducer(dest);
-			producer.send(session.createTextMessage(message));
+			JMSProducer producer = cxt.createProducer();
+			producer.send(cxt.createQueue(queueName), message);
 
-			MessageConsumer consumer = session.createConsumer(dest);
+			JMSConsumer consumer = cxt.createConsumer(dest);
 
-			conn.start();
-
-			TextMessage received = (TextMessage) consumer.receive(1000L);
-			if (received != null) {
-				System.out.println(received.getText());
-			}
-		} catch (JMSException e) {
-			e.printStackTrace();
+			String body = consumer.receiveBody(String.class, 1000L);
+			System.out.println(body);
 		}
 	}
 }
