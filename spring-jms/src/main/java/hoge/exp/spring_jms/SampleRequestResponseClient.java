@@ -2,12 +2,8 @@ package hoge.exp.spring_jms;
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
-import jakarta.jms.Connection;
-import jakarta.jms.JMSException;
-import jakarta.jms.MessageConsumer;
-import jakarta.jms.MessageProducer;
-import jakarta.jms.Session;
-import jakarta.jms.TextMessage;
+import jakarta.jms.JMSConsumer;
+import jakarta.jms.JMSContext;
 
 public class SampleRequestResponseClient {
     public static void main(String[] args) {
@@ -18,27 +14,13 @@ public class SampleRequestResponseClient {
     	String responseDestinationName = "response";
     	String message = "What time is it now?";
 
-        try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL);
-			Connection conn = cf.createConnection(username, password)) {
-        	Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(brokerURL, username, password);
+			JMSContext ctx = cf.createContext()) {
 
-        	MessageProducer producer = session.createProducer(
-        			session.createQueue(requestDestinationName));
+        	ctx.createProducer().send(ctx.createQueue(requestDestinationName), message);
 
-        	producer.send(session.createTextMessage(message));
-
-        	MessageConsumer consumer = session.createConsumer(
-        			session.createQueue(responseDestinationName));
-
-        	conn.start();
-
-        	TextMessage received = (TextMessage) consumer.receive(1000L);
-
-        	if (received != null) {
-        		System.out.println(received.getText());
-        	}
-        } catch (JMSException e) {
-			e.printStackTrace();
+			JMSConsumer consumer = ctx.createConsumer(ctx.createQueue(responseDestinationName));
+        	System.out.println(consumer.receiveBody(String.class, 1000L));
         }
     }
 }

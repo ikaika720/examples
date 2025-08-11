@@ -8,40 +8,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
-import org.springframework.jms.listener.SimpleMessageListenerContainer;
-import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 
 import jakarta.jms.ConnectionFactory;
-import jakarta.jms.JMSException;
-import jakarta.jms.Message;
-import jakarta.jms.Session;
 
 @Configuration
+@EnableJms
 public class SampleRequestResponseServer {
-	private String brokerURL = "tcp://localhost:61616";
-	private String requestDestinationName = "request";
-	private String responseDestinatnionName = "response";
-	private String username = "artemis";
-	private String password = "artemis";
+	private static final String BROKER_URL = "tcp://localhost:61616";
+	private static final String REQ_DEST = "request";
+	private static final String RES_DEST = "response";
+	private static final String USERNAME = "artemis";
+	private static final String PASSWORD = "artemis";
 
 	@Autowired
 	JmsTemplate jmsTemplate;
 
+    @JmsListener(destination = REQ_DEST)
     public void handleMessage(String text) {
     	System.out.println(text);
-    	jmsTemplate.send(new MessageCreator() {
-			@Override
-			public Message createMessage(Session session) throws JMSException {
-				return session.createTextMessage(new Date().toString());
-			}
-		});
+    	jmsTemplate.convertAndSend(new Date().toString());
     }
 
     public static void main(String[] args) throws InterruptedException {
-    	try (AnnotationConfigApplicationContext ctx =
-    			new AnnotationConfigApplicationContext(SampleRequestResponseServer.class)) {
+    	try (var ctx = new AnnotationConfigApplicationContext(SampleRequestResponseServer.class)) {
     		ctx.registerShutdownHook();
     		
     		System.out.println("Server started. Press Ctrl+C to stop.");
@@ -51,33 +44,20 @@ public class SampleRequestResponseServer {
 
     @Bean
     ConnectionFactory connectionFactory() {
-    	return new ActiveMQConnectionFactory(brokerURL, username, password);
+    	return new ActiveMQConnectionFactory(BROKER_URL, USERNAME, PASSWORD);
     }
 
-    @Bean
-    MessageListenerAdapter messageListener(final SampleRequestResponseServer server) {
-    	return new MessageListenerAdapter(server);
-    }
+	@Bean
+	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory cf) {
+		var factory = new DefaultJmsListenerContainerFactory();
+		factory.setConnectionFactory(cf);
+		return factory;
+	}
 
-    @Bean
-    SimpleMessageListenerContainer messageListenerContainer(final ConnectionFactory cf,
-    		final MessageListenerAdapter messageLisner) {
-    	return new SimpleMessageListenerContainer() {
-    		{
-    			setConnectionFactory(cf);
-    			setMessageListener(messageLisner);
-    			setDestinationName(requestDestinationName);
-    		}
-    	};
-    }
-
-    @Bean
-    JmsTemplate jmsTemplate(final ConnectionFactory cf) {
-    	return new JmsTemplate() {
-    		{
-    			setConnectionFactory(cf);
-    			setDefaultDestinationName(responseDestinatnionName);
-    		}
-    	};
+	@Bean
+    JmsTemplate jmsTemplate(ConnectionFactory cf) {
+    	var template = new JmsTemplate(cf);
+    	template.setDefaultDestinationName(RES_DEST);
+    	return template;
     }
 }
