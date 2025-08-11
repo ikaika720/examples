@@ -8,6 +8,8 @@ public class App {
 
     public static void main(String[] args) {
         log.info("helo");
+        log.debug("debug!");
+
         try {
             Integer.parseInt("xxx");
         } catch (NumberFormatException e) {
