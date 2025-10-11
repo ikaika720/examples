@@ -16,7 +16,7 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
     @Override
     @Transactional
     public void transfer(long accountFrom, long accountTo, BigDecimal amount) {
-        LocalDate date = LocalDate.now();
+        var date = LocalDate.now();
 
         long actNum1;
         long actNum2;
@@ -35,8 +35,8 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
             amt2 = amount.negate();
         }
 
-        Account act1 = em.find(Account.class, actNum1, LockModeType.PESSIMISTIC_WRITE);
-        Account act2 = em.find(Account.class, actNum2, LockModeType.PESSIMISTIC_WRITE);
+        var act1 = em.find(Account.class, actNum1, LockModeType.PESSIMISTIC_WRITE);
+        var act2 = em.find(Account.class, actNum2, LockModeType.PESSIMISTIC_WRITE);
 
         act1.setBalance(act1.getBalance().add(amt1));
         act2.setBalance(act2.getBalance().add(amt2));

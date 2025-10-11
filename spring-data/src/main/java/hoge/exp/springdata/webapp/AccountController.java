@@ -4,7 +4,6 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Sort;
@@ -27,13 +26,13 @@ public class AccountController {
     @PostMapping(value = "/account/new", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> createAccount(
             @RequestParam("id") long id, @RequestParam("balance") String balance) {
-        Account act = ar.save(new Account(id, getDecimalValue(balance)));
+        var act = ar.save(new Account(id, getDecimalValue(balance)));
         return ResponseEntity.status(HttpStatus.CREATED).body(act.toString());
     }
 
     @GetMapping(value = "/account/list", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAllAccounts() {
-        String result = ar.findAll(Sort.by(Sort.Order.asc("id")))
+        var result = ar.findAll(Sort.by(Sort.Order.asc("id")))
                 .stream()
                 .map(Account::toString)
                 .collect(Collectors.joining("\r\n"));
@@ -49,7 +48,7 @@ public class AccountController {
 
     @GetMapping(value = "/transaction/list", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getAllTransactions() {
-        String result = tr.findAll(Sort.by(Sort.Order.asc("account"), Sort.Order.asc("id")))
+        var result = tr.findAll(Sort.by(Sort.Order.asc("account"), Sort.Order.asc("id")))
                 .stream()
                 .map(Transaction::toString)
                 .collect(Collectors.joining("\r\n"));
@@ -58,13 +57,13 @@ public class AccountController {
 
     @GetMapping(value = "/account/{id}/transaction", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getTransactions(@PathVariable("id") long id) {
-        List<Transaction> transactions = tr.findByAccount(id, Sort.by(Sort.Direction.ASC, "id"));
+        var transactions = tr.findByAccount(id, Sort.by(Sort.Direction.ASC, "id"));
         
         if (transactions.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         
-        String result = transactions.stream()
+        var result = transactions.stream()
                 .map(Transaction::toString)
                 .collect(Collectors.joining("\r\n"));
         return ResponseEntity.ok(result);
