@@ -2,13 +2,10 @@ package hoge.exp.springdata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import jakarta.persistence.EntityManager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +25,11 @@ import org.springframework.util.MultiValueMap;
 
 import hoge.exp.springdata.webapp.Account;
 import hoge.exp.springdata.webapp.AccountController;
+import hoge.exp.springdata.webapp.Transaction;
+import jakarta.persistence.EntityManager;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SuppressWarnings("null")
 class SpringDataApplicationTests {
 
 	@LocalServerPort
@@ -56,27 +55,24 @@ class SpringDataApplicationTests {
 		ac.clear();
 
 		ac.createAccount(100L, "123.45");
-		String actStr = ac.getAccount(100L).getBody();
+		Account act = ac.getAccount(100L).getBody();
 
-		System.out.println(actStr);
-		System.out.println(LocalDateTime.now().toString().substring(0, 13));
-		assertTrue(actStr.contains("id=100"));
-		assertTrue(actStr.contains("balance=123.45"));
-		assertTrue(actStr.contains("lastUpdated=" + LocalDateTime.now().toString().substring(0, 13)));
+		assertEquals(100L, act.getId());
+		assertEquals(new BigDecimal("123.45"), act.getBalance());
+		assertEquals(LocalDateTime.now().toString().substring(0, 13), act.getLastUpdated().toString().substring(0, 13));
 
 		ac.createAccount(101L, "678.90");
-		String allStr = ac.getAllAccounts().getBody();
-		String[] splittedStr = allStr.split("\r\n");
+		var accounts = ac.getAllAccounts().getBody();
 
-		assertEquals(2, splittedStr.length);
+		assertEquals(2, accounts.size());
 
-		assertTrue(splittedStr[0].contains("id=100"));
-		assertTrue(splittedStr[0].contains("balance=123.45"));
-		assertTrue(splittedStr[0].contains("lastUpdated=" + LocalDateTime.now().toString().substring(0, 13)));
+		assertEquals(100L, accounts.get(0).getId());
+		assertEquals(new BigDecimal("123.45"), accounts.get(0).getBalance());
+		assertEquals(LocalDateTime.now().toString().substring(0, 13), accounts.get(0).getLastUpdated().toString().substring(0, 13));
 
-		assertTrue(splittedStr[1].contains("id=101"));
-		assertTrue(splittedStr[1].contains("balance=678.90"));
-		assertTrue(splittedStr[1].contains("lastUpdated=" + LocalDateTime.now().toString().substring(0, 13)));
+		assertEquals(101L, accounts.get(1).getId());
+		assertEquals(new BigDecimal("678.90"), accounts.get(1).getBalance());
+		assertEquals(LocalDateTime.now().toString().substring(0, 13), accounts.get(1).getLastUpdated().toString().substring(0, 13));
 
 		ac.clear();
 	}
@@ -93,34 +89,31 @@ class SpringDataApplicationTests {
 
 		ac.transfer(200L, 201L, "1.1", 0L);
 
-		String allStr = ac.getAllAccounts().getBody();
-		String[] splittedStr = allStr.split("\r\n");
+		var accounts = ac.getAllAccounts().getBody();
 
-		assertEquals(2, splittedStr.length);
+		assertEquals(2, accounts.size());
 
-		assertTrue(splittedStr[0].contains("id=200"));
-		assertTrue(splittedStr[0].contains("balance=98.90"));
-		assertTrue(splittedStr[0].contains("lastUpdated=" + LocalDateTime.now().toString().substring(0, 13)));
+		assertEquals(200L, accounts.get(0).getId());
+		assertEquals(new BigDecimal("98.90"), accounts.get(0).getBalance());
+		assertEquals(LocalDateTime.now().toString().substring(0, 13), accounts.get(0).getLastUpdated().toString().substring(0, 13));
 
-		assertTrue(splittedStr[1].contains("id=201"));
-		assertTrue(splittedStr[1].contains("balance=101.10"));
-		assertTrue(splittedStr[1].contains("lastUpdated=" + LocalDateTime.now().toString().substring(0, 13)));
+		assertEquals(201L, accounts.get(1).getId());
+		assertEquals(new BigDecimal("101.10"), accounts.get(1).getBalance());
+		assertEquals(LocalDateTime.now().toString().substring(0, 13), accounts.get(1).getLastUpdated().toString().substring(0, 13));
 
-		String transStr = ac.getAllTransactions().getBody();
-		System.out.println(transStr);
-		String[] splTransStr = transStr.split("\r\n");
+		var transactions = ac.getAllTransactions().getBody();
 
-		assertEquals(2, splTransStr.length);
+		assertEquals(2, transactions.size());
 
-		assertTrue(splTransStr[0].contains("account=200"));
-		assertTrue(splTransStr[0].contains("amount=-1.1"));
-		assertTrue(splTransStr[0].contains("date=" + LocalDate.now()));
-		assertTrue(splTransStr[0].contains("runningBalance=98.90"));
+		assertEquals(200L, transactions.get(0).getAccount());
+		assertEquals(new BigDecimal("-1.10"), transactions.get(0).getAmount());
+		assertEquals(LocalDate.now(), transactions.get(0).getDate());
+		assertEquals(new BigDecimal("98.90"), transactions.get(0).getRunningBalance());
 
-		assertTrue(splTransStr[1].contains("account=201"));
-		assertTrue(splTransStr[1].contains("amount=1.1"));
-		assertTrue(splTransStr[1].contains("date=" + LocalDate.now()));
-		assertTrue(splTransStr[1].contains("runningBalance=101.10"));
+		assertEquals(201L, transactions.get(1).getAccount());
+		assertEquals(new BigDecimal("1.10"), transactions.get(1).getAmount());
+		assertEquals(LocalDate.now(), transactions.get(1).getDate());
+		assertEquals(new BigDecimal("101.10"), transactions.get(1).getRunningBalance());
 	}
 
 	@Test
@@ -137,11 +130,12 @@ class SpringDataApplicationTests {
 			map.add("balance", "100");
 
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-			ResponseEntity<String> response = restTemplate.postForEntity(
-					  "http://localhost:" + port + "/account/new", request , String.class);
+			ResponseEntity<Account> response = restTemplate.postForEntity(
+					  "http://localhost:" + port + "/account/new", request , Account.class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-			assertThat(response.getBody()).contains("id=200").contains("balance=100.00");
+			assertThat(response.getBody().getId()).isEqualTo(200L);
+			assertThat(response.getBody().getBalance()).isEqualTo(new BigDecimal("100.00"));
 		}
 
 		{ // Create Account 201
@@ -150,11 +144,12 @@ class SpringDataApplicationTests {
 			map.add("balance", "123.45");
 
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-			ResponseEntity<String> response = restTemplate.postForEntity(
-					  "http://localhost:" + port + "/account/new", request , String.class);
+			ResponseEntity<Account> response = restTemplate.postForEntity(
+					  "http://localhost:" + port + "/account/new", request , Account.class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-			assertThat(response.getBody()).contains("id=201").contains("balance=123.45");
+			assertThat(response.getBody().getId()).isEqualTo(201L);
+			assertThat(response.getBody().getBalance()).isEqualTo(new BigDecimal("123.45"));
 		}
 
 		{ // Transfer
@@ -172,32 +167,35 @@ class SpringDataApplicationTests {
 		}
 
 		{ // Check Account 200 after transfer
-			ResponseEntity<String> response = restTemplate.getForEntity(
-					  "http://localhost:" + port + "/account/200", String.class);
+			ResponseEntity<Account> response = restTemplate.getForEntity(
+					  "http://localhost:" + port + "/account/200", Account.class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-			assertThat(response.getBody()).contains("id=200").contains("balance=98.77");
+			assertThat(response.getBody().getId()).isEqualTo(200L);
+			assertThat(response.getBody().getBalance()).isEqualTo(new BigDecimal("98.77"));
 		}
 
 		{ // Check Account 201 after transfer
-			ResponseEntity<String> response = restTemplate.getForEntity(
-					  "http://localhost:" + port + "/account/201", String.class);
+			ResponseEntity<Account> response = restTemplate.getForEntity(
+					  "http://localhost:" + port + "/account/201", Account.class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-			assertThat(response.getBody()).contains("id=201").contains("balance=124.68");
+			assertThat(response.getBody().getId()).isEqualTo(201L);
+			assertThat(response.getBody().getBalance()).isEqualTo(new BigDecimal("124.68"));
 		}
 
 		{ // Check the transactions
-			ResponseEntity<String> response = restTemplate.getForEntity(
-					  "http://localhost:" + port + "/transaction/list", String.class);
+			ResponseEntity<Transaction[]> response = restTemplate.getForEntity(
+					  "http://localhost:" + port + "/transaction/list", Transaction[].class);
 
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-			String[] splTransStr = response.getBody().split("\r\n");
-			assertThat(splTransStr[0]).contains("account=200").contains("amount=-1.23")
-					.contains("runningBalance=98.77");
-			assertThat(splTransStr[1]).contains("account=201").contains("amount=1.23")
-					.contains("runningBalance=124.68");
+			Transaction[] transactions = response.getBody();
+			assertThat(transactions[0].getAccount()).isEqualTo(200L);
+			assertThat(transactions[0].getAmount()).isEqualTo(new BigDecimal("-1.23"));
+			assertThat(transactions[0].getRunningBalance()).isEqualTo(new BigDecimal("98.77"));
+			assertThat(transactions[1].getAccount()).isEqualTo(201L);
+			assertThat(transactions[1].getAmount()).isEqualTo(new BigDecimal("1.23"));
+			assertThat(transactions[1].getRunningBalance()).isEqualTo(new BigDecimal("124.68"));
 		}
 
 		ac.clear();

@@ -1,10 +1,11 @@
 package hoge.exp.springdata.webapp;
 
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -23,72 +24,63 @@ public class AccountController {
     private final AccountRepository ar;
     private final TransactionRepository tr;
 
-    @PostMapping(value = "/account/new", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> createAccount(
+    @PostMapping(value = "/account/new", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Account> createAccount(
             @RequestParam("id") long id, @RequestParam("balance") String balance) {
         var act = ar.save(new Account(id, getDecimalValue(balance)));
-        return ResponseEntity.status(HttpStatus.CREATED).body(act.toString());
+        return ResponseEntity.status(HttpStatus.CREATED).body(act);
     }
 
-    @GetMapping(value = "/account/list", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getAllAccounts() {
-        var result = ar.findAll(Sort.by(Sort.Order.asc("id")))
-                .stream()
-                .map(Account::toString)
-                .collect(Collectors.joining("\r\n"));
+    @GetMapping(value = "/account/list", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Account>> getAllAccounts() {
+        var result = ar.findAll(Sort.by(Sort.Order.asc("id")));
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/account/{id}", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getAccount(@PathVariable("id") long id) {
+    @GetMapping(value = "/account/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Account> getAccount(@PathVariable("id") long id) {
         return ar.findById(id)
-                .map(account -> ResponseEntity.ok(account.toString()))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/transaction/list", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getAllTransactions() {
-        var result = tr.findAll(Sort.by(Sort.Order.asc("account"), Sort.Order.asc("id")))
-                .stream()
-                .map(Transaction::toString)
-                .collect(Collectors.joining("\r\n"));
+    @GetMapping(value = "/transaction/list", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
+        var result = tr.findAll(Sort.by(Sort.Order.asc("account"), Sort.Order.asc("id")));
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/account/{id}/transaction", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getTransactions(@PathVariable("id") long id) {
+    @GetMapping(value = "/account/{id}/transaction", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Transaction>> getTransactions(@PathVariable("id") long id) {
         var transactions = tr.findByAccount(id, Sort.by(Sort.Direction.ASC, "id"));
         
         if (transactions.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         
-        var result = transactions.stream()
-                .map(Transaction::toString)
-                .collect(Collectors.joining("\r\n"));
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(transactions);
     }
 
-    @GetMapping(value = "/account/totalBalance", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getTotalBalance() {
+    @GetMapping(value = "/account/totalBalance", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, BigDecimal>> getTotalBalance() {
         BigDecimal totalBalance = ar.getTotalBalance();
-        return ResponseEntity.ok(totalBalance.toString());
+        return ResponseEntity.ok(Map.of("totalBalance", totalBalance));
     }
 
-    @PostMapping(value = "/account/transfer", produces = TEXT_PLAIN_VALUE)
-    public String transfer(@RequestParam("accountFrom") long accountFrom,
+    @PostMapping(value = "/account/transfer", produces = APPLICATION_JSON_VALUE)
+    public Map<String, String> transfer(@RequestParam("accountFrom") long accountFrom,
             @RequestParam("accountTo") long accountTo, @RequestParam("amount") String amount,
             @RequestParam("sleep") long sleep) {
         ar.transfer(accountFrom, accountTo, getDecimalValue(amount), sleep);
-        return "Completed successfully.";
+        return Map.of("message", "Completed successfully.");
     }
 
-    @PostMapping(value = "/clear", produces = TEXT_PLAIN_VALUE)
-    public String clear() {
+    @PostMapping(value = "/clear", produces = APPLICATION_JSON_VALUE)
+    public Map<String, String> clear() {
         tr.truncate();
         tr.resetTransactionIdSequence();
         ar.truncate();
-        return "Completed successfully.";
+        return Map.of("message", "Completed successfully.");
     }
 
     private BigDecimal getDecimalValue(String value) {
