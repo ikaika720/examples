@@ -8,11 +8,11 @@ import jakarta.ws.rs.client.ClientBuilder;
 public class TemperatureConversionClient {
 
     public static void main(String[] args) {
-        String unit = "c";	// c | f | k
+        String unit = "c"; // c | f | k
         double value = 20.0d;
 
         Client client = ClientBuilder.newClient();
-        Temperature temp = client.target("http://localhost:8080/jaxrs/webapi/temperature")
+        Temperature temp = client.target("http://localhost:8080/webapi/temperature")
                 .queryParam("unit", unit)
                 .queryParam("temp", value)
                 .request("application/json")

@@ -1,10 +1,12 @@
 package hoge.exp.jaxrs.webapp;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
 @Path("hello")
+@RequestScoped
 public class Hello {
     @GET
     @Produces("text/html")

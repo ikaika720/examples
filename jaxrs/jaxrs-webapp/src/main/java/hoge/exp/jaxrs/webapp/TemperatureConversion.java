@@ -2,6 +2,7 @@ package hoge.exp.jaxrs.webapp;
 
 import hoge.exp.jaxrs.common.Temperature;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -9,30 +10,31 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("temperature")
+@RequestScoped
 public class TemperatureConversion {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Temperature getTemperature(@QueryParam("unit") String unit,
             @QueryParam("temp") double temp) {
         Temperature result = new Temperature();
-        switch(unit) {
-        case "c":
-            result.setC(temp);
-            result.setF(temp * (9d / 5d) + 32);
-            result.setK(temp + 273.15d);
-            break;
-        case "f":
-            result.setC((temp - 32) * (5d / 9d));
-            result.setF(temp);
-            result.setK((temp + 459.67d) * (5d / 9d));
-            break;
-        case "k":
-            result.setC(temp - 273.15d);
-            result.setF(temp * (9d / 5d) - 459.67d);
-            result.setK(temp);
-            break;
-        default:
-            throw new IllegalArgumentException();
+        switch (unit) {
+            case "c":
+                result.setC(temp);
+                result.setF(temp * (9d / 5d) + 32);
+                result.setK(temp + 273.15d);
+                break;
+            case "f":
+                result.setC((temp - 32) * (5d / 9d));
+                result.setF(temp);
+                result.setK((temp + 459.67d) * (5d / 9d));
+                break;
+            case "k":
+                result.setC(temp - 273.15d);
+                result.setF(temp * (9d / 5d) - 459.67d);
+                result.setK(temp);
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
 
         return result;

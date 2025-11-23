@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jakarta REST examples</title>
+</head>
+
+<body>
+    <div>
+        <p>
+            <a href="webapi/hello">hello - simple GET and text/plain response</a>
+        </p>
+    </div>
+    <hr>
+    <div>
+        <p>
+            Temperature conversion
+        </p>
+        <input id="temp" type="text" name="temp" value="0">
+        <label for="celsius">°C</label>
+        <input id="celsius" type="radio" name="unit" value="c" checked="checked">
+        <label for="celsius">°F</label>
+        <input id="fahrenheit" type="radio" name="unit" value="f">
+        <label for="celsius">K</label>
+        <input id="kelvin" type="radio" name="unit" value="k">
+        <br>
+        <button onclick="convertTemperature()">convert</button>
+        <p>
+            <span id="temperatureResultCelsius">NaN</span> °C<br>
+            <span id="temperatureResultFahrenheit">NaN</span> °F<br>
+            <span id="temperatureResultKelvin">NaN</span> K
+        </p>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        function convertTemperature() {
+            var unit = $("input:radio[name='unit']:checked").val();
+            var temp = $("#temp").val();
+            $.ajax({
+                url: "webapi/temperature",
+                dataType: "json",
+                data: { unit: unit, temp: temp }
+            }).done(function (data) {
+                $("#temperatureResultCelsius").text(data["c"]);
+                $("#temperatureResultFahrenheit").text(data["f"]);
+                $("#temperatureResultKelvin").text(data["k"]);
+            }).fail(function () {
+                $("#temperatureResultCelsius").text("ERROR");
+                $("#temperatureResultFahrenheit").text("ERROR");
+                $("#temperatureResultKelvin").text("ERROR");
+            });
+        }
+    </script>
+</body>
+
+</html>
