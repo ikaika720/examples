@@ -2,8 +2,8 @@ package hoge.exp.jaxrs.client;
 
 import hoge.exp.jaxrs.common.Temperature;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
 
 public class TemperatureConversionClient {
 
@@ -17,8 +17,8 @@ public class TemperatureConversionClient {
                 .queryParam("temp", value)
                 .request("application/json")
                 .get(Temperature.class);
-        System.out.println(temp.getC() + " °C, "
-                + temp.getF() + " °F, " + temp.getK() + " K");
+        System.out.println(temp.getC() + " Â°C, "
+                + temp.getF() + " Â°F, " + temp.getK() + " K");
     }
 
 }
