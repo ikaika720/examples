@@ -1,53 +1,59 @@
 package hoge.exp.springdata;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.client.RestTestClient;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.WebApplicationContext;
 
 import hoge.exp.springdata.webapp.Account;
 import hoge.exp.springdata.webapp.AccountController;
 import hoge.exp.springdata.webapp.Transaction;
-import jakarta.persistence.EntityManager;
 
 @SpringBootTest
-@AutoConfigureRestTestClient
 class SpringDataApplicationTests {
 
+	WebTestClient webTestClient;
+
 	@Autowired
-	private RestTestClient restTestClient;
+	WebApplicationContext context;
+
+	@BeforeEach
+	void setUp() {
+		this.webTestClient = MockMvcWebTestClient.bindToApplicationContext(this.context).build();
+	}
 
 	@Autowired
 	AccountController ac;
-	@Autowired
-	EntityManager em;
 
 	@Test
-	void contextLoads() {
+	void accountAssertTest() {
 		Account act = new Account(1L, BigDecimal.valueOf(1234, 2));
-		assertEquals(act.getId(), 1L);
-		assertEquals(act.getBalance(), BigDecimal.valueOf(1234, 2));
+		assertThat(act)
+				.extracting(Account::getId, Account::getBalance)
+				.containsExactly(1L, BigDecimal.valueOf(1234, 2));
 	}
 
 	@Transactional
 	@Test
+	@Sql(statements = "TRUNCATE TABLE account CASCADE")
 	void accountControllerCreateAndGetTest() {
-		ac.clear();
-
 		ac.createAccount(100L, "123.45");
 		Account act = ac.getAccount(100L).getBody();
 
@@ -69,20 +75,16 @@ class SpringDataApplicationTests {
 		assertEquals(new BigDecimal("678.90"), accounts.get(1).getBalance());
 		assertEquals(LocalDateTime.now().toString().substring(0, 13),
 				accounts.get(1).getLastUpdated().toString().substring(0, 13));
-
-		ac.clear();
 	}
 
 	@Transactional
 	@Test
+	@Sql(statements = {
+			"TRUNCATE TABLE account CASCADE",
+			"INSERT INTO account (id, balance, lastUpdated) VALUES (200, 100.00, current_timestamp)",
+			"INSERT INTO account (id, balance, lastUpdated) VALUES (201, 100.00, current_timestamp)"
+	})
 	void accountControllerTransferTest() {
-		ac.clear();
-
-		ac.createAccount(200L, "100.00");
-		ac.createAccount(201L, "100.00");
-
-		em.flush();
-
 		ac.transfer(200L, 201L, "1.1", 0L);
 
 		var accounts = ac.getAllAccounts().getBody();
@@ -115,10 +117,15 @@ class SpringDataApplicationTests {
 	}
 
 	@Test
-	@Transactional(propagation = Propagation.NEVER)
+	@Sql(statements = {
+			"TRUNCATE TABLE transaction CASCADE",
+			"TRUNCATE TABLE account CASCADE",
+	}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(statements = {
+			"TRUNCATE TABLE transaction CASCADE",
+			"TRUNCATE TABLE account CASCADE",
+	}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	void httpRequestTest() {
-		ac.clear();
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -127,15 +134,16 @@ class SpringDataApplicationTests {
 			map.add("id", "200");
 			map.add("balance", "100");
 
-			restTestClient.post()
+			webTestClient.post()
 					.uri("/account/new")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-					.body(map)
+					.bodyValue(map)
 					.exchange()
 					.expectStatus().isCreated()
 					.expectBody(Account.class).value(actual -> {
-						assertThat(actual.getId()).isEqualTo(200L);
-						assertThat(actual.getBalance()).isEqualTo(new BigDecimal("100.00"));
+						assertThat(actual)
+								.extracting(Account::getId, Account::getBalance)
+								.containsExactly(200L, new BigDecimal("100.00"));
 						assertThat(actual.getLastUpdated()).isNotNull();
 					});
 		}
@@ -145,15 +153,16 @@ class SpringDataApplicationTests {
 			map.add("id", "201");
 			map.add("balance", "123.45");
 
-			restTestClient.post()
+			webTestClient.post()
 					.uri("/account/new")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-					.body(map)
+					.bodyValue(map)
 					.exchange()
 					.expectStatus().isCreated()
 					.expectBody(Account.class).value(actual -> {
-						assertThat(actual.getId()).isEqualTo(201L);
-						assertThat(actual.getBalance()).isEqualTo(new BigDecimal("123.45"));
+						assertThat(actual)
+								.extracting(Account::getId, Account::getBalance)
+								.containsExactly(201L, new BigDecimal("123.45"));
 						assertThat(actual.getLastUpdated()).isNotNull();
 					});
 		}
@@ -165,53 +174,53 @@ class SpringDataApplicationTests {
 			map.add("amount", "1.23");
 			map.add("sleep", "250");
 
-			restTestClient.post()
+			webTestClient.post()
 					.uri("/account/transfer")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-					.body(map)
+					.bodyValue(map)
 					.exchange()
 					.expectStatus().isOk();
 		}
 
 		{ // Check Account 200 after transfer
-			restTestClient.get()
+			webTestClient.get()
 					.uri("/account/200")
 					.exchange()
 					.expectStatus().isOk()
 					.expectBody(Account.class).value(actual -> {
-						assertThat(actual.getId()).isEqualTo(200L);
-						assertThat(actual.getBalance()).isEqualTo(new BigDecimal("98.77"));
+						assertThat(actual)
+								.extracting(Account::getId, Account::getBalance)
+								.containsExactly(200L, new BigDecimal("98.77"));
 						assertThat(actual.getLastUpdated()).isNotNull();
 					});
 		}
 
 		{ // Check Account 201 after transfer
-			restTestClient.get()
+			webTestClient.get()
 					.uri("/account/201")
 					.exchange()
 					.expectStatus().isOk()
 					.expectBody(Account.class).value(actual -> {
-						assertThat(actual.getId()).isEqualTo(201L);
-						assertThat(actual.getBalance()).isEqualTo(new BigDecimal("124.68"));
+						assertThat(actual)
+								.extracting(Account::getId, Account::getBalance)
+								.containsExactly(201L, new BigDecimal("124.68"));
 						assertThat(actual.getLastUpdated()).isNotNull();
 					});
 		}
 
 		{ // Check the transactions
-			restTestClient.get()
+			webTestClient.get()
 					.uri("/transaction/list")
 					.exchange()
 					.expectStatus().isOk()
 					.expectBody(Transaction[].class).value(transactions -> {
-						assertThat(transactions[0].getAccount()).isEqualTo(200L);
-						assertThat(transactions[0].getAmount()).isEqualTo(new BigDecimal("-1.23"));
-						assertThat(transactions[0].getRunningBalance()).isEqualTo(new BigDecimal("98.77"));
-						assertThat(transactions[1].getAccount()).isEqualTo(201L);
-						assertThat(transactions[1].getAmount()).isEqualTo(new BigDecimal("1.23"));
-						assertThat(transactions[1].getRunningBalance()).isEqualTo(new BigDecimal("124.68"));
+						assertThat(transactions)
+								.extracting(Transaction::getAccount, Transaction::getAmount,
+										Transaction::getRunningBalance)
+								.containsExactly(
+										tuple(200L, new BigDecimal("-1.23"), new BigDecimal("98.77")),
+										tuple(201L, new BigDecimal("1.23"), new BigDecimal("124.68")));
 					});
 		}
-
-		ac.clear();
 	}
 }
