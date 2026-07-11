@@ -1,6 +1,6 @@
 subprojects {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -13,7 +13,7 @@ project(':jpa-mdb-ear') {
     }
 
 ear {
-    archiveName 'jpa-mdb.ear'
+    archiveFileName = 'jpa-mdb.ear'
         deploymentDescriptor {
             version = "7"
         }
@@ -25,18 +25,30 @@ project(':jpa-mdb-client') {
     apply plugin: 'eclipse'
     apply plugin: 'application'
 
-    dependencies {
-        compile 'org.wildfly:wildfly-jms-client-bom:9.0.2.Final'
+    java {
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
     }
 
-    mainClassName = 'hoge.exp.jpa.mdb.client.Client'
+    dependencies {
+        implementation 'org.wildfly:wildfly-jms-client-bom:9.0.2.Final'
+    }
+
+    application {
+        mainClass = 'hoge.exp.jpa.mdb.client.Client'
+    }
 }
 
 project(':jpa-mdb-ejbjar') {
     apply plugin: 'java'
     apply plugin: 'eclipse'
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
+    }
+
     dependencies {
-        compile 'javax:javaee-api:7.0'
+        implementation 'javax:javaee-api:7.0'
     }
 }
