@@ -6,7 +6,7 @@
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
-        <jackson.version>2.22.0</jackson.version>
+        <jackson.version>2.22.1</jackson.version>
         <spring-framework.version>6.2.18</spring-framework.version>
     </properties>
     <dependencies>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.7</version>
+            <version>42.7.11</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
