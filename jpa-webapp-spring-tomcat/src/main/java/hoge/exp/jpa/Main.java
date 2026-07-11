@@ -1,8 +1,8 @@
 package hoge.exp.jpa;
 
-import hoge.exp.jpa.webapp.Account;
-import hoge.exp.jpa.webapp.AccountService;
-import hoge.exp.jpa.webapp.Transaction;
+import hoge.exp.jpa.webapp.tomcat.Account;
+import hoge.exp.jpa.webapp.tomcat.AccountService;
+import hoge.exp.jpa.webapp.tomcat.Transaction;
 
 import java.math.BigDecimal;
 

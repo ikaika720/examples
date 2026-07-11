@@ -1,4 +1,4 @@
-package hoge.exp.jpa.webapp;
+package hoge.exp.jpa.webapp.tomcat;
 
 import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = "hoge.exp.jpa.webapp")
+@ComponentScan(basePackages = "hoge.exp.jpa.webapp.tomcat")
 @EnableTransactionManagement
 public class AppConfig {
 
@@ -48,7 +48,7 @@ public class AppConfig {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(ds);
         emf.setJpaVendorAdapter(jva);
-        emf.setPackagesToScan("hoge.exp.jpa.webapp");
+        emf.setPackagesToScan("hoge.exp.jpa.webapp.tomcat");
         return emf;
 
     }

@@ -1,4 +1,4 @@
-package hoge.exp.jpa.webapp;
+package hoge.exp.jpa.webapp.tomcat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
