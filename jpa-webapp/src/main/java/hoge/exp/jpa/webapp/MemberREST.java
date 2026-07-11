@@ -20,18 +20,18 @@ public class MemberREST {
     MemberService ms;
 
     @GET
-    @Produces("text/html")
+    @Produces("text/plain")
     public Response listAll() {
         StringBuilder sb = new StringBuilder();
         for (Member m : ms.getAll()) {
-            sb.append(m.toString()).append("<br>\r\n");
+            sb.append(m.toString()).append("\r\n");
         }
         return Response.ok(sb.toString()).build();
     }
 
     @GET
     @Path("{id}")
-    @Produces("text/html")
+    @Produces("text/plain")
     public Response getById(@PathParam("id") long id) {
         Member member = ms.getById(id);
         if (member == null) {
@@ -42,7 +42,7 @@ public class MemberREST {
 
     @GET
     @Path("new")
-    @Produces("text/html")
+    @Produces("text/plain")
     public Response create(@QueryParam("id") long id,
             @QueryParam("name") String name,
             @QueryParam("email") String email,
@@ -53,7 +53,7 @@ public class MemberREST {
 
     @GET
     @Path("update")
-    @Produces("text/html")
+    @Produces("text/plain")
     public Response update(@QueryParam("id") long id,
             @QueryParam("name") String name,
             @QueryParam("email") String email,
