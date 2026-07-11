@@ -36,6 +36,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
+    - name: Set up JDK 25
+      uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+      with:
+        java-version: 25
+        distribution: 'temurin'
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@02c5e83432fe5497fd85b873b6c9f16a8578e1d9 # v3.37.0
@@ -46,10 +52,29 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@02c5e83432fe5497fd85b873b6c9f16a8578e1d9 # v3.37.0
+    - name: Build Projects
+      run: |
+        echo "Building Maven projects..."
+        for pom in $(find . -maxdepth 2 -name "pom.xml" | sort); do
+          echo "Building Maven project in $(dirname "$pom")..."
+          mvn clean compile -f "$pom" -B
+        done
+
+        echo "Building Gradle projects..."
+        for gradlew in $(find . -maxdepth 2 -name "gradlew" | sort); do
+          dir=$(dirname "$gradlew")
+          echo "Building Gradle project with wrapper in $dir..."
+          chmod +x "$gradlew"
+          (cd "$dir" && ./gradlew classes --no-daemon)
+        done
+
+        for build_file in $(find . -maxdepth 2 \( -name "build.gradle" -o -name "build.gradle.kts" \) | sort); do
+          dir=$(dirname "$build_file")
+          if [ ! -f "$dir/gradlew" ]; then
+            echo "Building Gradle project without wrapper in $dir..."
+            (cd "$dir" && gradle classes --no-daemon)
+          fi
+        done
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
