@@ -1,9 +1,9 @@
 plugins {
     java
-    id("org.springframework.boot") version "4.0.0"
+    id("org.springframework.boot") version "4.1.0"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.hibernate.orm") version "7.1.8.Final"
-    id("org.graalvm.buildtools.native") version "0.11.3"
+    id("org.hibernate.orm") version "7.2.20.Final"
+    id("org.graalvm.buildtools.native") version "1.1.3"
 }
 
 group = "hoge.exp"
@@ -31,11 +31,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework:spring-webflux") // Required for WebTestClient
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -49,6 +46,3 @@ tasks.withType<Test> {
   useJUnitPlatform()
 }
 
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-parameters")
-}
