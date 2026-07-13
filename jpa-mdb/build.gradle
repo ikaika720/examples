@@ -15,7 +15,7 @@ project(':jpa-mdb-ear') {
 ear {
     archiveFileName = 'jpa-mdb.ear'
         deploymentDescriptor {
-            version = "7"
+            version = "11"
         }
     }
 }
@@ -26,12 +26,31 @@ project(':jpa-mdb-client') {
     apply plugin: 'application'
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_25
-        targetCompatibility = JavaVersion.VERSION_25
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     dependencies {
-        implementation 'org.wildfly:wildfly-jms-client-bom:9.0.2.Final'
+        implementation 'org.wildfly:wildfly-jms-client-bom:40.0.1.Final'
+        testImplementation 'org.testcontainers:testcontainers:1.19.7'
+        testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
+        testImplementation 'org.testcontainers:postgresql:1.19.7'
+        testImplementation 'org.postgresql:postgresql:42.7.13'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    task copyPostgresqlJar(type: Copy) {
+        from { configurations.testRuntimeClasspath.filter { it.name.matches("postgresql-\\d.*\\.jar") } }
+        into layout.buildDirectory.dir("postgresql")
+        rename { "postgresql.jar" }
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+
+    test {
+        useJUnitPlatform()
+        dependsOn ':jpa-mdb-ear:ear', copyPostgresqlJar
     }
 
     application {
@@ -44,11 +63,22 @@ project(':jpa-mdb-ejbjar') {
     apply plugin: 'eclipse'
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_25
-        targetCompatibility = JavaVersion.VERSION_25
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     dependencies {
-        implementation 'javax:javaee-api:7.0'
+        implementation 'jakarta.platform:jakarta.jakartaee-api:11.0.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        testImplementation 'org.mockito:mockito-core:5.14.0'
+        testImplementation 'org.mockito:mockito-junit-jupiter:5.14.0'
+        testImplementation 'net.bytebuddy:byte-buddy:1.15.5'
+    }
+
+    test {
+        useJUnitPlatform()
+        jvmArgs '-Dnet.bytebuddy.experimental=true'
     }
 }

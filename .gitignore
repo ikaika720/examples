@@ -4,10 +4,9 @@
 **/.vscode
 
 **/.gradle
-build/
-
-*/target/
-*/bin
+**/build/
+**/bin/
+**/target/
 !./activemq-jms/bin
 !./spring-jms/bin
 

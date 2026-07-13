@@ -4,12 +4,12 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.jms.TextMessage;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.Queue;
+import jakarta.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -23,8 +23,8 @@ public class Client {
     private static final String DEFAULT_RESPONSE_QUEUE = "MyResQueue";
     private static final String DEFAULT_USERNAME = "user1";
     private static final String DEFAULT_PASSWORD = "password";
-    private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
-    private static final String PROVIDER_URL = "http-remoting://127.0.0.1:8080";
+    private static final String INITIAL_CONTEXT_FACTORY = "org.wildfly.naming.client.WildFlyInitialContextFactory";
+    private static final String PROVIDER_URL = "remote+http://127.0.0.1:8080";
 
     public static void main(String[] args) {
         String accountId = args.length > 0 ? args[0] : DEFAULT_ACCOUNT_ID;
@@ -56,7 +56,7 @@ public class Client {
             String cfString = System.getProperty("connection.factory", DEFAULT_CONNECTION_FACTORY);
             ConnectionFactory cf = (ConnectionFactory) namingCtx.lookup(cfString);
 
-            try (JMSContext ctx = cf.createContext(userName, password)){
+            try (JMSContext ctx = cf.createContext(userName, password)) {
                 // send
                 Queue reqQ = ctx.createQueue(System.getProperty("reqQueue", DEFAULT_REQUEST_QUEUE));
                 TextMessage req = ctx.createTextMessage(msgTxt);
@@ -65,14 +65,17 @@ public class Client {
                 // receive
                 Queue resQ = ctx.createQueue(System.getProperty("resQueue", DEFAULT_RESPONSE_QUEUE));
                 Message received = ctx.createConsumer(resQ,
-                        String.format("JMSCorrelationID = '%s'", req.getJMSMessageID())).receive(1000L);
+                        String.format("JMSCorrelationID = '%s'", req.getJMSMessageID())).receive(10000L);
 
+                if (received == null) {
+                    throw new RuntimeException("JMS receive timed out after 10 seconds");
+                }
                 System.out.println(((TextMessage) received).getText());
             } catch (JMSException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                throw new RuntimeException("JMS operation failed", e);
             }
         } catch (NamingException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            throw new RuntimeException("JNDI naming operation failed", e);
         } finally {
             if (namingCtx != null) {
                 try {
