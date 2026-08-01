@@ -1,5 +1,6 @@
 package hoge.exp.jpa.webapp.tomcat;
 
+import java.util.Properties;
 import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -23,12 +24,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class AppConfig {
 
     @Bean(destroyMethod = "close")
-    protected DataSource dataSource(@Value("${datasource.url}") String url,
-            @Value("${datasource.username}") String username,
-            @Value("${datasource.password}") String password) {
+    protected DataSource dataSource(
+            @Value("${datasource.url:jdbc:postgresql://localhost:5432/mydb}") String url,
+            @Value("${datasource.username:user1}") String username,
+            @Value("${datasource.password:password}") String password) {
         BasicDataSource ds = new BasicDataSource();
         ds.setDefaultAutoCommit(false);
         ds.setDriverClassName("org.postgresql.Driver");
+
+        String envUrl = System.getenv("DATASOURCE_URL");
+        if (envUrl != null && !envUrl.isEmpty()) {
+            url = envUrl;
+        }
+
         ds.setPassword(password);
         ds.setUrl(url);
         ds.setUsername(username);
@@ -49,14 +57,16 @@ public class AppConfig {
         emf.setDataSource(ds);
         emf.setJpaVendorAdapter(jva);
         emf.setPackagesToScan("hoge.exp.jpa.webapp.tomcat");
-        return emf;
 
+        Properties jpaProperties = new Properties();
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
+        emf.setJpaProperties(jpaProperties);
+
+        return emf;
     }
 
     @Bean
     protected JpaVendorAdapter jpaVendorAdapter() {
-        HibernateJpaVendorAdapter jva = new HibernateJpaVendorAdapter();
-        jva.setDatabase(Database.POSTGRESQL);
-        return jva;
+        return new HibernateJpaVendorAdapter();
     }
 }
