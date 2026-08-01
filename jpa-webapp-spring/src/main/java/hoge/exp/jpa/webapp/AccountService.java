@@ -2,7 +2,7 @@ package hoge.exp.jpa.webapp;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
@@ -19,7 +19,7 @@ public class AccountService {
 
     @Transactional
     public void transfer(long accountFrom, long accountTo, BigDecimal amount) {
-        Date date = new Date();
+        LocalDate date = LocalDate.now();
 
         long actNum1;
         long actNum2;

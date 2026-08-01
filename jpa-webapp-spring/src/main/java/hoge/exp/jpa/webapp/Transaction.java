@@ -2,7 +2,7 @@ package hoge.exp.jpa.webapp;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,8 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,10 +36,9 @@ public class Transaction {
     @Setter
     @Getter
     private long account;
-    @Temporal(TemporalType.DATE)
     @Setter
     @Getter
-    private Date date;
+    private LocalDate date;
     @Setter
     @Getter
     private BigDecimal amount;
@@ -50,7 +47,7 @@ public class Transaction {
     @Getter
     private BigDecimal runningBalance;
 
-    public Transaction(long account, Date date, BigDecimal amount, BigDecimal runningBalance) {
+    public Transaction(long account, LocalDate date, BigDecimal amount, BigDecimal runningBalance) {
         this.account = account;
         this.date = date;
         this.amount = amount;

@@ -2,7 +2,7 @@ package hoge.exp.jpa.webapp;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,8 +10,6 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,10 +32,9 @@ public class Account {
     @Setter
     @Getter
     private BigDecimal balance;
-    @Temporal(TemporalType.TIMESTAMP)
     @Setter
     @Getter
-    private Date lastUpdated;
+    private LocalDateTime lastUpdated;
 
     public Account(long id, BigDecimal balance) {
         this.id = id;
@@ -47,7 +44,7 @@ public class Account {
     @PrePersist
     @PreUpdate
     private void currentTimestamp() {
-        lastUpdated = new Date();
+        lastUpdated = LocalDateTime.now();
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class DataLoader {
     private static final int DEFAULT_NUM_OF_RCD = 10_000;
     private static final String DEFAULT_DB_URL = "jdbc:postgresql:mydb";
-    private static final String DEFAULT_DB_USER = "user01";
+    private static final String DEFAULT_DB_USER = "user1";
     private static final String DEFAULT_DB_PASSWD = "password";
 
     public static void main(String[] args) {

@@ -5,8 +5,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -23,13 +24,13 @@ public class AccountControllerTest {
         Account account0 = new Account();
         account0.setBalance(BigDecimal.valueOf(50, 2));
         account0.setId(123L);
-        account0.setLastUpdated(new Date(0L));
+        account0.setLastUpdated(LocalDateTime.of(1970, 1, 1, 0, 0));
         accounts.add(account0);
 
         Account account1 = new Account();
         account1.setBalance(BigDecimal.valueOf(100, 2));
         account1.setId(456L);
-        account1.setLastUpdated(new Date(86400000L));
+        account1.setLastUpdated(LocalDateTime.of(1970, 1, 2, 0, 0));
         accounts.add(account1);
 
         when(as.getAllAccounts()).thenReturn(accounts);
@@ -55,7 +56,7 @@ public class AccountControllerTest {
         Transaction trans0 = new Transaction();
         trans0.setAccount(111L);
         trans0.setAmount(BigDecimal.valueOf(50, 2));
-        trans0.setDate(new Date(0L));
+        trans0.setDate(LocalDate.of(1970, 1, 1));
         trans0.setId(222L);
         trans0.setRunningBalance(BigDecimal.valueOf(100, 2));
         transactions.add(trans0);
@@ -63,7 +64,7 @@ public class AccountControllerTest {
         Transaction trans1 = new Transaction();
         trans1.setAccount(333L);
         trans1.setAmount(BigDecimal.valueOf(150, 2));
-        trans1.setDate(new Date(86400000L));
+        trans1.setDate(LocalDate.of(1970, 1, 2));
         trans1.setId(444L);
         trans1.setRunningBalance(BigDecimal.valueOf(200, 2));
         transactions.add(trans1);
