@@ -1,0 +1,11 @@
+.gradle/
+build/
+bin/
+out/
+.idea/
+*.iml
+.DS_Store
+
+# Client local keys
+client/keys/
+**/keys/*.json
