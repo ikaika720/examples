@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure Message Board demonstrating Strict Nonce Content Security Policy (CSP), Subresource Integrity (SRI), and SameSite Cookie protection in Spring Boot.">
+    <!-- CSRF Token Meta Information -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Message Board</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/favicon.png">
+    <link rel="preload" href="/css/style.css" as="style" integrity="@STYLE_SRI_HASH@" crossorigin="anonymous">
+    <!-- SRI hash automatically generated during Gradle build (@STYLE_SRI_HASH@) -->
+    <link rel="stylesheet" href="/css/style.css" integrity="@STYLE_SRI_HASH@" crossorigin="anonymous">
+</head>
+<body>
+
+<main class="container">
+    <header>
+        <div>
+            <div class="brand-title">
+                Message Board
+            </div>
+            <div class="brand-sub">
+                CSP / SRI / CSRF Verification
+            </div>
+        </div>
+    </header>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">New Message</div>
+            </div>
+            <!-- Thymeleaf th:action automatically generates a single CSRF hidden token field -->
+            <form th:action="@{/posts}" method="POST">
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" name="author" class="form-control" placeholder="Author name" value="User">
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" id="post-title" class="form-control" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <div class="flex-between">
+                        <label class="margin-0">Content</label>
+                        <div class="flex-gap-sm">
+                            <button type="button" class="quick-payload-btn" data-payload="script">Test script</button>
+                            <button type="button" class="quick-payload-btn" data-payload="onerror">Test onerror</button>
+                            <button type="button" class="quick-payload-btn" data-payload="sqli">Test SQLi</button>
+                        </div>
+                    </div>
+                    <textarea name="content" id="post-content" class="form-control" placeholder="Enter message content..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Submit</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Timeline</div>
+                <button class="btn btn-danger btn-sm" id="btn-clear-posts">Clear</button>
+            </div>
+            <div id="posts-container">
+                <div th:each="post : ${posts}" class="post-item">
+                    <div class="post-header">
+                        <span class="post-author" th:text="${post.author}">Author</span>
+                        <span th:text="${#temporals.format(post.createdAt, 'HH:mm:ss')}">Time</span>
+                    </div>
+                    <div class="post-title" th:text="${post.title}">Title</div>
+                    <div class="post-body" th:text="${post.content}">Content</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- SRI hash automatically generated during Gradle build (@SCRIPT_SRI_HASH@) -->
+<script src="/js/app.js" th:attr="nonce=${cspNonce}" integrity="@SCRIPT_SRI_HASH@" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Gradle build outputs
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Security Certificates, Keystores & Private Keys
+*.p12
+*.pem
+*.crt
+*.key
+*.jks
+*.pfx
+keystore.p12
+**/keystore.p12
+src/main/resources/keystore.p12

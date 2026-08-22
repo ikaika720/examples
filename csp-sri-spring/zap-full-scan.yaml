@@ -1,0 +1,44 @@
+env:
+  contexts:
+    - name: "CspSriApp"
+      urls:
+        - "https://host.docker.internal:8443/"
+      includePaths:
+        - "https://host.docker.internal:8443/.*"
+  parameters:
+    failOnError: false
+    failOnWarning: false
+    progressToStdout: true
+
+jobs:
+  - type: spider
+    parameters:
+      context: "CspSriApp"
+      user: ""
+      url: "https://host.docker.internal:8443/"
+      maxDuration: 2
+      maxDepth: 5
+      maxChildren: 10
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: activeScan
+    parameters:
+      context: "CspSriApp"
+      user: ""
+      policy: "Default Policy"
+      maxRuleDurationInMins: 2
+      maxScanDurationInMins: 10
+      injectPluginIdInHeader: false
+      handleAntiCSRFTokens: true
+
+  - type: report
+    parameters:
+      template: "traditional-html-plus"
+      reportDir: "/zap/wrk"
+      reportFile: "zap-full-report.html"
+      reportTitle: "OWASP ZAP Full Active Scan Report - CSP SRI Spring"
+      reportDescription: "Comprehensive Active and Passive Security Assessment"
+      displayReport: false
