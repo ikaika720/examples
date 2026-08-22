@@ -27,7 +27,7 @@
             <dependency>
                 <groupId>io.helidon</groupId>
                 <artifactId>helidon-dependencies</artifactId>
-                <version>4.3.2</version>
+                <version>4.5.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -39,6 +39,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>copy-libs</id>
@@ -48,7 +49,7 @@
             <plugin>
                 <groupId>io.smallrye</groupId>
                 <artifactId>jandex-maven-plugin</artifactId>
-                <version>3.1.5</version>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <id>make-index</id>
